@@ -1,0 +1,28 @@
+#
+# Eclipse
+#
+.settings
+.classpath
+.project
+
+#
+# IntelliJ Idea
+#
+.idea
+*.iml
+
+#
+# Maven
+#
+site
+target
+test-output
+pom-local.xml
+
+#
+# AutoUI
+#
+env-config-local.ini
+mybatis-config-local.ini
+cx-autoui-suite-local.xml
+mybatis-config-local.xml
