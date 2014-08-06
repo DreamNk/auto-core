@@ -242,6 +242,11 @@ public abstract class AbstractPage<T extends AbstractPage<T>> {
   		return findElement(locator).getText();
   	}
   	
+ 	public T verify_element_selected(By locator) {
+ 	  	  verify(ExpectedConditions.elementToBeSelected(locator));
+ 	  	  return me();
+ 	}
+  	
     public T verify_element_by_text (By locator, String text) {
         verify(ExpectedConditions.textToBePresentInElementLocated(locator, text));
         return me();

@@ -78,7 +78,7 @@ public abstract class AbstractAutoUITest {
         return null;
     }
 
-    protected WebDriver open_secondary_browser() {
+    protected WebDriver open_or_focus_secondary_browser() {
     	return driverContext.getSecondaryDriver();
     }
     
