@@ -221,6 +221,16 @@ public abstract class AbstractPage<T extends AbstractPage<T>> {
         return me();
     }
     
+    protected T alert_comments(String text) {
+    	this.driver.switchTo().alert().sendKeys(text);
+    	return me();
+    }
+
+    protected T alert_accept() {
+    	this.driver.switchTo().alert().accept();
+    	return me();
+    }
+    
 	public static String format_current_date() {
   		DateFormat dateFormat = new SimpleDateFormat("MMM d yyyy");
   		Calendar cal = Calendar.getInstance();
