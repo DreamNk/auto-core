@@ -18,6 +18,7 @@ import org.testng.annotations.BeforeClass;
 
 import com.ghx.auto.core.db.domain.Scenario;
 import com.ghx.auto.core.db.mapper.Mapper;
+import com.ghx.auto.core.support.FileTransfer;
 import com.ghx.auto.core.ui.page.AbstractPage;
 import com.ghx.auto.core.ui.support.Alert;
 import com.ghx.auto.core.ui.support.DriverContext;
@@ -129,6 +130,15 @@ public abstract class AbstractAutoUITest {
     
     protected String getEnvId() {
     	return Environment.valueOf(envConfig.getTargetEnv().toUpperCase()).getEnvId();
+    }
+    
+    /**
+     * Get File Transfer Utility.
+     *
+     * @param section Environment Configuration Section to be referred.
+     */
+    protected FileTransfer getFileTransfer(String section) {
+    	return new FileTransfer(envConfig, section);
     }
 
     /**

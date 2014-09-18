@@ -21,6 +21,7 @@
 		<mybatis.version>3.2.2</mybatis.version>
 		<postgresql.version>9.2-1003-jdbc4</postgresql.version>
 		<logback.version>1.1.0</logback.version>
+		<jcraft.version>0.1.50</jcraft.version>
 	</properties>
   
   	<build>
@@ -101,6 +102,11 @@
 			<groupId>org.postgresql</groupId>
 			<artifactId>postgresql</artifactId>
 			<version>${postgresql.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.jcraft</groupId>
+			<artifactId>jsch</artifactId>
+			<version>${jcraft.version}</version>
 		</dependency>
 	</dependencies>
 </project>
