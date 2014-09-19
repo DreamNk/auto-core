@@ -35,7 +35,13 @@ public class FileTransfer {
     }
     
 	public FileTransfer send_file_via_sFtp(File inFile,String destFileName) {
-		return send_file_via_sFtp(inFile.toString(),destFileName);
+		String inFileStr = "";
+		try {
+			inFileStr = FileUtils.readFileToString(inFile);
+		} catch (IOException e) {
+			Assert.fail("Failure reading file " + inFile.getName() + " from path: " + inFile.getPath() + ".");
+		}
+		return send_file_via_sFtp(inFileStr,destFileName);
 	}
 	
 	public FileTransfer send_file_via_sFtp(String inFile,String destFileName) {
