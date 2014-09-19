@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.Writer;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.testng.Assert;
 
@@ -23,6 +24,8 @@ import com.jcraft.jsch.Session;
 
 public class FileTransfer {
 	
+	public static final String FILE_PATH_APPENDER = "/"; 
+	
     private EnvConfig envConfig;
     private String section;
     
@@ -32,11 +35,10 @@ public class FileTransfer {
     }
     
 	public FileTransfer send_file_via_sFtp(File inFile,String destFileName) {
-		create_send_file_via_sFtp(inFile.toString(),destFileName);
-		return this;
+		return send_file_via_sFtp(inFile.toString(),destFileName);
 	}
 	
-	public FileTransfer create_send_file_via_sFtp(String inFile,String destFileName) {
+	public FileTransfer send_file_via_sFtp(String inFile,String destFileName) {
 
 		InputStream stream = new ByteArrayInputStream(inFile.getBytes());
 
@@ -50,8 +52,8 @@ public class FileTransfer {
 			mySession.setPassword(getConfigParamValue(section,"password"));
 			java.util.Properties config = new java.util.Properties();
 			config.put("StrictHostKeyChecking", "no");
+			config.put("PreferredAuthentications", "publickey,keyboard-interactive,password");
 			mySession.setConfig(config);
-			mySession.setConfig("PreferredAuthentications", "publickey,keyboard-interactive,password");
 			mySession.connect();
 			myChannel = mySession.openChannel("sftp");
 			myChannel.connect();
@@ -72,19 +74,24 @@ public class FileTransfer {
 	}
 	
 	public FileTransfer store_file_to_local(File inFile,String destFileName) {
-		create_send_file_via_sFtp(inFile.toString(),destFileName);
+		File destFile = new File(getConfigParamValue(section,"destFilePath") + FILE_PATH_APPENDER + destFileName);
+		try {
+			FileUtils.copyFile(inFile, destFile);
+		} catch (IOException e) {
+			Assert.fail("Failure uploading file " + destFileName + ", path: " + getConfigParamValue(section,"destFilePath") + ".");
+		}
 		return this;
 	}
 	
-	public FileTransfer create_store_file_to_local(String inFile, String destFileName) {
+	public FileTransfer store_file_to_local(String inFile, String destFileName) {
 		Writer output = null;
-		File file = new File(getConfigParamValue(section,"destFilePath") + destFileName);
+		File file = new File(getConfigParamValue(section,"destFilePath") + FILE_PATH_APPENDER + destFileName);
 		try {
 			output = new BufferedWriter(new FileWriter(file));
 			output.write(inFile);
 			output.close();
 		} catch (IOException e) {
-			Assert.fail("Failure uploading file " + destFileName + " to local system, path: " + getConfigParamValue(section,"destFilePath") + ".");
+			Assert.fail("Failure uploading file " + destFileName + ", path: " + getConfigParamValue(section,"destFilePath") + ".");
 		}
 		return this;
 	}
