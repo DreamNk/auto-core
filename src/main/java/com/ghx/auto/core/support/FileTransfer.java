@@ -34,19 +34,19 @@ public class FileTransfer {
     	this.section = section;
     }
     
-	public FileTransfer send_file_via_sFtp(File inFile,String destFileName) {
-		String inFileStr = "";
+	public FileTransfer send_file_via_sFtp(File srcFile,String destFileName) {
+		String srcFileStr = "";
 		try {
-			inFileStr = FileUtils.readFileToString(inFile);
+			srcFileStr = FileUtils.readFileToString(srcFile);
 		} catch (IOException e) {
-			Assert.fail("Failure reading file " + inFile.getName() + " from path: " + inFile.getPath() + ".");
+			Assert.fail("Failure reading file " + srcFile.getName() + " from path: " + srcFile.getPath() + ".");
 		}
-		return send_file_via_sFtp(inFileStr,destFileName);
+		return send_file_via_sFtp(srcFileStr,destFileName);
 	}
 	
-	public FileTransfer send_file_via_sFtp(String inFile,String destFileName) {
+	public FileTransfer send_file_via_sFtp(String srcFile,String destFileName) {
 
-		InputStream stream = new ByteArrayInputStream(inFile.getBytes());
+		InputStream stream = new ByteArrayInputStream(srcFile.getBytes());
 
 		Session mySession = null;
 		Channel myChannel = null;
@@ -79,22 +79,22 @@ public class FileTransfer {
 		return this;
 	}
 	
-	public FileTransfer store_file_to_local(File inFile,String destFileName) {
+	public FileTransfer store_file_to_local(File srcFile,String destFileName) {
 		File destFile = new File(getConfigParamValue(section,"destFilePath") + FILE_PATH_APPENDER + destFileName);
 		try {
-			FileUtils.copyFile(inFile, destFile);
+			FileUtils.copyFile(srcFile, destFile);
 		} catch (IOException e) {
 			Assert.fail("Failure uploading file " + destFileName + ", path: " + getConfigParamValue(section,"destFilePath") + ".");
 		}
 		return this;
 	}
 	
-	public FileTransfer store_file_to_local(String inFile, String destFileName) {
+	public FileTransfer store_file_to_local(String srcFile, String destFileName) {
 		Writer output = null;
 		File file = new File(getConfigParamValue(section,"destFilePath") + FILE_PATH_APPENDER + destFileName);
 		try {
 			output = new BufferedWriter(new FileWriter(file));
-			output.write(inFile);
+			output.write(srcFile);
 			output.close();
 		} catch (IOException e) {
 			Assert.fail("Failure uploading file " + destFileName + ", path: " + getConfigParamValue(section,"destFilePath") + ".");
@@ -102,7 +102,7 @@ public class FileTransfer {
 		return this;
 	}
 	
-    protected String getConfigParamValue(String section, String param) {
+    private String getConfigParamValue(String section, String param) {
     	String paramValue =  this.envConfig.get(section.toUpperCase()).get(param);
     	Assert.assertNotNull(StringUtils.defaultIfBlank(paramValue, null),
                 "No configuration provided for the param: " + param
