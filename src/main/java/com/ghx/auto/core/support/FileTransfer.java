@@ -54,8 +54,8 @@ public class FileTransfer {
 
 		try {
 			JSch jsch = new JSch();
-			mySession = jsch.getSession(getConfigParamValue(section,"userName"), getConfigParamValue(section,"host"));
-			mySession.setPassword(getConfigParamValue(section,"password"));
+			mySession = jsch.getSession(getConfigParamValue("userName"), getConfigParamValue("host"));
+			mySession.setPassword(getConfigParamValue("password"));
 			java.util.Properties config = new java.util.Properties();
 			config.put("StrictHostKeyChecking", "no");
 			config.put("PreferredAuthentications", "publickey,keyboard-interactive,password");
@@ -64,11 +64,11 @@ public class FileTransfer {
 			myChannel = mySession.openChannel("sftp");
 			myChannel.connect();
 			myChannelSftp = (ChannelSftp) myChannel;
-			myChannelSftp.cd(getConfigParamValue(section,"destFilePath"));
+			myChannelSftp.cd(getConfigParamValue("destFilePath"));
 			myChannelSftp.put(stream, destFileName);
 
 		} catch (Exception ex) {
-			Assert.fail("Failure uploading file " + destFileName + " to host " + getConfigParamValue(section,"host") + ".");
+			Assert.fail("Failure uploading file " + destFileName + " to host " + getConfigParamValue("host") + ".");
 		} finally {
 			if (myChannel != null) {
 				if (myChannel.isConnected()) {
@@ -80,29 +80,29 @@ public class FileTransfer {
 	}
 	
 	public FileTransfer store_file_to_local(File srcFile,String destFileName) {
-		File destFile = new File(getConfigParamValue(section,"destFilePath") + FILE_PATH_APPENDER + destFileName);
+		File destFile = new File(getConfigParamValue("destFilePath") + FILE_PATH_APPENDER + destFileName);
 		try {
 			FileUtils.copyFile(srcFile, destFile);
 		} catch (IOException e) {
-			Assert.fail("Failure uploading file " + destFileName + ", path: " + getConfigParamValue(section,"destFilePath") + ".");
+			Assert.fail("Failure uploading file " + destFileName + ", path: " + getConfigParamValue("destFilePath") + ".");
 		}
 		return this;
 	}
 	
 	public FileTransfer store_file_to_local(String srcFile, String destFileName) {
 		Writer output = null;
-		File file = new File(getConfigParamValue(section,"destFilePath") + FILE_PATH_APPENDER + destFileName);
+		File file = new File(getConfigParamValue("destFilePath") + FILE_PATH_APPENDER + destFileName);
 		try {
 			output = new BufferedWriter(new FileWriter(file));
 			output.write(srcFile);
 			output.close();
 		} catch (IOException e) {
-			Assert.fail("Failure uploading file " + destFileName + ", path: " + getConfigParamValue(section,"destFilePath") + ".");
+			Assert.fail("Failure uploading file " + destFileName + ", path: " + getConfigParamValue("destFilePath") + ".");
 		}
 		return this;
 	}
 	
-    private String getConfigParamValue(String section, String param) {
+    private String getConfigParamValue(String param) {
     	String paramValue =  this.envConfig.get(section.toUpperCase()).get(param);
     	Assert.assertNotNull(StringUtils.defaultIfBlank(paramValue, null),
                 "No configuration provided for the param: " + param

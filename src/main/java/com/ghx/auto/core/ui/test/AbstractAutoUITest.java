@@ -19,6 +19,7 @@ import org.testng.annotations.BeforeClass;
 import com.ghx.auto.core.db.domain.Scenario;
 import com.ghx.auto.core.db.mapper.Mapper;
 import com.ghx.auto.core.support.FileTransfer;
+import com.ghx.auto.core.support.RestAccess;
 import com.ghx.auto.core.ui.page.AbstractPage;
 import com.ghx.auto.core.ui.support.Alert;
 import com.ghx.auto.core.ui.support.DriverContext;
@@ -141,6 +142,15 @@ public abstract class AbstractAutoUITest {
     	return new FileTransfer(envConfig, section);
     }
 
+    /**
+     * Get Rest Access Utility.
+     *
+     * @param section Environment Configuration Section to be referred.
+     */
+    protected RestAccess getRestAccess(String section) {
+    	return new RestAccess(envConfig, section);
+    }
+    
     /**
      * Send an alert.
      *

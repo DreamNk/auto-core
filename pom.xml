@@ -22,6 +22,7 @@
 		<postgresql.version>9.2-1003-jdbc4</postgresql.version>
 		<logback.version>1.1.0</logback.version>
 		<jcraft.version>0.1.50</jcraft.version>
+		<restassured.version>2.3.1</restassured.version>
 	</properties>
   
   	<build>
@@ -63,7 +64,7 @@
 			<artifactId>ini4j</artifactId>
 			<version>${ini4j.version}</version>
 		</dependency>
-		    <dependency>
+		<dependency>
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-classic</artifactId>
             <version>${logback.version}</version>
@@ -107,6 +108,11 @@
 			<groupId>com.jcraft</groupId>
 			<artifactId>jsch</artifactId>
 			<version>${jcraft.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.jayway.restassured</groupId>
+			<artifactId>rest-assured</artifactId>
+			<version>${restassured.version}</version>
 		</dependency>
 	</dependencies>
 </project>
