@@ -10,6 +10,8 @@ import org.testng.Assert;
 import com.ghx.auto.core.ui.support.EnvConfig;
 import com.jayway.restassured.RestAssured;
 
+import org.hamcrest.xml.HasXPath;
+
 public class RestAccess {
 	
     private EnvConfig envConfig;
@@ -20,13 +22,43 @@ public class RestAccess {
     	this.section = section;
     }
     
-    public RestAccess test_status_code_for_get(String relativePath, int code) {
+    public RestAccess get_verify_status(String relativePath, int code) {
     	RestAssured
+    		//.given().auth().certificate(getConfigParamValue("keystorePath"), getConfigParamValue("keystorePassword"))
+    		.given()
+    			.auth().certificate(getConfigParamValue("cacertsPath"), getConfigParamValue("cacertsPassword"))
     		.expect()
     			.statusCode(code)
     		.when()
     			.get(getConfigParamValue("baseUrl")+ relativePath);
-    	
+    			
+    	return this;
+    }
+    
+    public RestAccess get_verify_status_content_xml(String relativePath, int code, String xpath, String value ) {
+    	RestAssured
+    		//.given().auth().certificate(getConfigParamValue("keystorePath"), getConfigParamValue("keystorePassword"))
+    		.given()
+    			.auth().certificate(getConfigParamValue("cacertsPath"), getConfigParamValue("cacertsPassword"))
+    		.expect()
+    			.statusCode(code)
+    			//.body(hasXPath(xpath), containsString(value))
+    		.when()
+    			.get(getConfigParamValue("baseUrl")+ relativePath);
+    			
+    	return this;
+    }
+    
+    public RestAccess get_verify_status_content_json(String relativePath, int code) {
+    	RestAssured
+    		//.given().auth().certificate(getConfigParamValue("keystorePath"), getConfigParamValue("keystorePassword"))
+    		.given()
+    			.auth().certificate(getConfigParamValue("cacertsPath"), getConfigParamValue("cacertsPassword"))
+    		.expect()
+    			.statusCode(code)
+    		.when()
+    			.get(getConfigParamValue("baseUrl")+ relativePath);
+    			
     	return this;
     }
     
