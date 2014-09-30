@@ -252,6 +252,10 @@ public abstract class AbstractPage<T extends AbstractPage<T>> {
   		return findElement(locator).getText();
   	}
   	
+  	public String find_current_url() {
+  		return this.driver.getCurrentUrl();
+  	}
+  	
  	public T verify_element_selected(By locator) {
  	  	  verify(ExpectedConditions.elementToBeSelected(locator));
  	  	  return me();
