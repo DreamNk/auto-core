@@ -4,13 +4,17 @@
 
 package com.ghx.auto.core.support;
 
+import static org.hamcrest.core.StringContains.containsString;
+import static org.hamcrest.xml.HasXPath.hasXPath;
+
 import org.apache.commons.lang3.StringUtils;
 import org.testng.Assert;
 
 import com.ghx.auto.core.ui.support.EnvConfig;
 import com.jayway.restassured.RestAssured;
+import com.jayway.restassured.specification.RequestSpecification;
+import com.jayway.restassured.specification.ResponseSpecification;
 
-import org.hamcrest.xml.HasXPath;
 
 public class RestAccess {
 	
@@ -22,13 +26,13 @@ public class RestAccess {
     	this.section = section;
     }
     
-    public RestAccess get_verify_status(String relativePath, int code) {
+    public RestAccess get_verify_status(String relativePath, int statusCode) {
     	RestAssured
     		//.given().auth().certificate(getConfigParamValue("keystorePath"), getConfigParamValue("keystorePassword"))
     		.given()
     			.auth().certificate(getConfigParamValue("cacertsPath"), getConfigParamValue("cacertsPassword"))
     		.expect()
-    			.statusCode(code)
+    			.statusCode(statusCode)
     		.when()
     			.get(getConfigParamValue("baseUrl")+ relativePath);
     			
@@ -42,53 +46,190 @@ public class RestAccess {
     			.auth().certificate(getConfigParamValue("cacertsPath"), getConfigParamValue("cacertsPassword"))
     		.expect()
     			.statusCode(code)
-    			//.body(hasXPath(xpath), containsString(value))
+    			.body(hasXPath(xpath), containsString(value))
     		.when()
     			.get(getConfigParamValue("baseUrl")+ relativePath);
     			
     	return this;
     }
     
-    public RestAccess get_verify_status_content_json(String relativePath, int code) {
+    public RestAccess get_verify_status_content_json(String relativePath, int code, String jsonPath, String value ) {
     	RestAssured
     		//.given().auth().certificate(getConfigParamValue("keystorePath"), getConfigParamValue("keystorePassword"))
     		.given()
     			.auth().certificate(getConfigParamValue("cacertsPath"), getConfigParamValue("cacertsPassword"))
     		.expect()
     			.statusCode(code)
+    			.body(jsonPath, containsString(value))
     		.when()
     			.get(getConfigParamValue("baseUrl")+ relativePath);
     			
     	return this;
     }
     
-    public RestAccess test_status_code_for_post(String relativePath, int code) {
+    public RestAccess get_verify_content_xml(String relativePath,String xpath, String value ) {
     	RestAssured
-    		.expect()
-    			.statusCode(code)
+    		//.given().auth().certificate(getConfigParamValue("keystorePath"), getConfigParamValue("keystorePassword"))
+    		.given()
+    			.auth().certificate(getConfigParamValue("cacertsPath"), getConfigParamValue("cacertsPassword"))
     		.when()
-    			.post(getConfigParamValue("baseUrl")+ relativePath);
-    	
+    			.get(getConfigParamValue("baseUrl")+ relativePath)
+    		.then()
+    			.assertThat()
+    			.body(hasXPath(xpath), containsString(value));
+    			
     	return this;
     }
     
-    public RestAccess test_status_code_for_put(String relativePath, int code) {
+    public RestAccess get_verify_content_json(String relativePath,String jsonPath, String value ) {
     	RestAssured
-    		.expect()
-    			.statusCode(code)
+    		//.given().auth().certificate(getConfigParamValue("keystorePath"), getConfigParamValue("keystorePassword"))
+    		.given()
+    			.auth().certificate(getConfigParamValue("cacertsPath"), getConfigParamValue("cacertsPassword"))
     		.when()
-    			.put(getConfigParamValue("baseUrl")+ relativePath);
-    	
+    			.get(getConfigParamValue("baseUrl")+ relativePath)
+    		.then()
+    			.assertThat()
+    			.body(jsonPath, containsString(value));
+    			
     	return this;
     }
     
-    public RestAccess test_status_code_for_delete(String relativePath, int code) {
+    public RestAccess get_verify_status_content(String relativePath, RequestSpecification requestSpec,ResponseSpecification responseSpec) {
     	RestAssured
-    		.expect()
-    			.statusCode(code)
+    		//.given().auth().certificate(getConfigParamValue("keystorePath"), getConfigParamValue("keystorePassword"))
+    		.given()
+    			.auth().certificate(getConfigParamValue("cacertsPath"), getConfigParamValue("cacertsPassword"))
+    			.spec(requestSpec)
     		.when()
-    			.delete(getConfigParamValue("baseUrl")+ relativePath);
-    	
+    			.get(getConfigParamValue("baseUrl")+ relativePath)
+    		.then()
+    			.spec(responseSpec);
+    			
+    	return this;
+    }
+    
+    public RestAccess post_xml_verify_status(String relativePath, int statusCode) {
+    	RestAssured
+    		//.given().auth().certificate(getConfigParamValue("keystorePath"), getConfigParamValue("keystorePassword"))
+    		.given()
+    			.auth().certificate(getConfigParamValue("cacertsPath"), getConfigParamValue("cacertsPassword"))
+    		.expect()
+    			.statusCode(statusCode)
+    		.when()
+    			.get(getConfigParamValue("baseUrl")+ relativePath);
+    			
+    	return this;
+    }
+    
+    public RestAccess post_xml_verify_content(String relativePath,String xpath, String value ) {
+    	RestAssured
+    		//.given().auth().certificate(getConfigParamValue("keystorePath"), getConfigParamValue("keystorePassword"))
+    		.given()
+    			.auth().certificate(getConfigParamValue("cacertsPath"), getConfigParamValue("cacertsPassword"))
+    		.when()
+    			.get(getConfigParamValue("baseUrl")+ relativePath)
+    		.then()
+    			.assertThat()
+    			.body(hasXPath(xpath), containsString(value));
+    			
+    	return this;
+    }
+        
+    public RestAccess post_xml_verify_status_content(String relativePath, int statusCode, String xpath, String value ) {
+    	RestAssured
+    		//.given().auth().certificate(getConfigParamValue("keystorePath"), getConfigParamValue("keystorePassword"))
+    		.given()
+    			.auth().certificate(getConfigParamValue("cacertsPath"), getConfigParamValue("cacertsPassword"))
+    		.expect()
+    			.statusCode(statusCode)
+    			.body(hasXPath(xpath), containsString(value))
+    		.when()
+    			.get(getConfigParamValue("baseUrl")+ relativePath);
+    			
+    	return this;
+    }
+    
+    public RestAccess post_xml_verify_status_content(String relativePath, RequestSpecification requestSpec,ResponseSpecification responseSpec) {
+    	RestAssured
+    		//.given().auth().certificate(getConfigParamValue("keystorePath"), getConfigParamValue("keystorePassword"))
+    		.given()
+    			.auth().certificate(getConfigParamValue("cacertsPath"), getConfigParamValue("cacertsPassword"))
+    			.spec(requestSpec)
+    		.when()
+    			.get(getConfigParamValue("baseUrl")+ relativePath)
+    		.then()
+    			.spec(responseSpec);
+    			
+    	return this;
+    }
+    
+    public RestAccess put_xml_verify_status_content(String relativePath, RequestSpecification requestSpec,ResponseSpecification responseSpec) {
+    	RestAssured
+    		//.given().auth().certificate(getConfigParamValue("keystorePath"), getConfigParamValue("keystorePassword"))
+    		.given()
+    			.auth().certificate(getConfigParamValue("cacertsPath"), getConfigParamValue("cacertsPassword"))
+    			.spec(requestSpec)
+    		.when()
+    			.get(getConfigParamValue("baseUrl")+ relativePath)
+    		.then()
+    			.spec(responseSpec);
+    			
+    	return this;
+    }
+    
+    public RestAccess delete_verify_status(String relativePath, int statusCode) {
+    	RestAssured
+    		//.given().auth().certificate(getConfigParamValue("keystorePath"), getConfigParamValue("keystorePassword"))
+    		.given()
+    			.auth().certificate(getConfigParamValue("cacertsPath"), getConfigParamValue("cacertsPassword"))
+    		.expect()
+    			.statusCode(statusCode)
+    		.when()
+    			.get(getConfigParamValue("baseUrl")+ relativePath);
+    			
+    	return this;
+    }
+    
+    public RestAccess delete_verify_content(String relativePath,String xpath, String value ) {
+    	RestAssured
+    		//.given().auth().certificate(getConfigParamValue("keystorePath"), getConfigParamValue("keystorePassword"))
+    		.given()
+    			.auth().certificate(getConfigParamValue("cacertsPath"), getConfigParamValue("cacertsPassword"))
+    		.when()
+    			.get(getConfigParamValue("baseUrl")+ relativePath)
+    		.then()
+    			.assertThat()
+    			.body(hasXPath(xpath), containsString(value));
+    			
+    	return this;
+    }
+        
+    public RestAccess delete_verify_status_content(String relativePath, int statusCode, String xpath, String value ) {
+    	RestAssured
+    		//.given().auth().certificate(getConfigParamValue("keystorePath"), getConfigParamValue("keystorePassword"))
+    		.given()
+    			.auth().certificate(getConfigParamValue("cacertsPath"), getConfigParamValue("cacertsPassword"))
+    		.expect()
+    			.statusCode(statusCode)
+    			.body(hasXPath(xpath), containsString(value))
+    		.when()
+    			.get(getConfigParamValue("baseUrl")+ relativePath);
+    			
+    	return this;
+    }
+    
+    public RestAccess delete_verify_status_content(String relativePath, RequestSpecification requestSpec,ResponseSpecification responseSpec) {
+    	RestAssured
+    		//.given().auth().certificate(getConfigParamValue("keystorePath"), getConfigParamValue("keystorePassword"))
+    		.given()
+    			.auth().certificate(getConfigParamValue("cacertsPath"), getConfigParamValue("cacertsPassword"))
+    			.spec(requestSpec)
+    		.when()
+    			.get(getConfigParamValue("baseUrl")+ relativePath)
+    		.then()
+    			.spec(responseSpec);
+    			
     	return this;
     }
     
