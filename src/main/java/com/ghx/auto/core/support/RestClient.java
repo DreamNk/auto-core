@@ -23,18 +23,18 @@ import com.jayway.restassured.specification.RequestSpecification;
 import com.jayway.restassured.specification.ResponseSpecification;
 
 
-public class RestAccess {
+public class RestClient {
 	
     private EnvConfig envConfig;
     private String section;
     
-    public RestAccess(EnvConfig envConfig, String section) {
+    public RestClient(EnvConfig envConfig, String section) {
     	this.envConfig = envConfig;
     	this.section = section;
     	loadCertificates();
     }
     
-    public RestAccess get_verify_status(String relativePath, int statusCode) {
+    public RestClient get_verify_status(String relativePath, int statusCode) {
     	RestAssured
     		.expect()
     			.statusCode(statusCode)
@@ -44,7 +44,7 @@ public class RestAccess {
     	return this;
     }
     
-    public RestAccess get_verify_status_content_xml(String relativePath, int statusCode, String xpath, String value ) {
+    public RestClient get_verify_status_content_xml(String relativePath, int statusCode, String xpath, String value ) {
     	RestAssured
     		.expect()
     			.statusCode(statusCode)
@@ -55,7 +55,7 @@ public class RestAccess {
     	return this;
     }
     
-    public RestAccess get_verify_status_content_json(String relativePath, int statusCode, String jsonPath, String value ) {
+    public RestClient get_verify_status_content_json(String relativePath, int statusCode, String jsonPath, String value ) {
     	RestAssured
     		.expect()
     			.statusCode(statusCode)
@@ -66,7 +66,7 @@ public class RestAccess {
     	return this;
     }
     
-    public RestAccess get_verify_content_xml(String relativePath,String xpath, String value ) {
+    public RestClient get_verify_content_xml(String relativePath,String xpath, String value ) {
     	RestAssured
     		.when()
     			.get(getConfigParamValue("baseUrl")+ relativePath)
@@ -77,7 +77,7 @@ public class RestAccess {
     	return this;
     }
     
-    public RestAccess get_verify_content_json(String relativePath,String jsonPath, String value ) {
+    public RestClient get_verify_content_json(String relativePath,String jsonPath, String value ) {
     	RestAssured
     		.when()
     			.get(getConfigParamValue("baseUrl")+ relativePath)
@@ -88,7 +88,7 @@ public class RestAccess {
     	return this;
     }
     
-    public RestAccess get_verify_status_content(String relativePath, RequestSpecification requestSpec,ResponseSpecification responseSpec) {
+    public RestClient get_verify_status_content(String relativePath, RequestSpecification requestSpec,ResponseSpecification responseSpec) {
     	loadCertificates(requestSpec);
     	RestAssured
     		.given()
@@ -101,7 +101,7 @@ public class RestAccess {
     	return this;
     }
     
-    public RestAccess post_xml_verify_status(String relativePath, String requestBody, int statusCode) {
+    public RestClient post_xml_verify_status(String relativePath, String requestBody, int statusCode) {
     	RestAssured
     		.given()
     			.contentType(ContentType.XML)
@@ -114,7 +114,7 @@ public class RestAccess {
     	return this;
     }
     
-    public RestAccess post_xml_verify_content(String relativePath, String requestBody, String xpath, String value ) {
+    public RestClient post_xml_verify_content(String relativePath, String requestBody, String xpath, String value ) {
     	RestAssured
     		.given()
     			.contentType(ContentType.XML)
@@ -128,7 +128,7 @@ public class RestAccess {
     	return this;
     }
         
-    public RestAccess post_xml_verify_status_content(String relativePath, String requestBody, int statusCode, String xpath, String value ) {
+    public RestClient post_xml_verify_status_content(String relativePath, String requestBody, int statusCode, String xpath, String value ) {
     	RestAssured
     		.given()
     			.contentType(ContentType.XML)
@@ -142,7 +142,7 @@ public class RestAccess {
     	return this;
     }
     
-    public RestAccess post_json_verify_status(String relativePath, String requestBody, int statusCode) {
+    public RestClient post_json_verify_status(String relativePath, String requestBody, int statusCode) {
     	RestAssured
     		.given()
     			.contentType(ContentType.JSON)
@@ -155,7 +155,7 @@ public class RestAccess {
     	return this;
     }
     
-    public RestAccess post_json_verify_content(String relativePath, String requestBody, String jsonPath, String value ) {
+    public RestClient post_json_verify_content(String relativePath, String requestBody, String jsonPath, String value ) {
     	RestAssured
     		.given()
     			.contentType(ContentType.JSON)
@@ -169,7 +169,7 @@ public class RestAccess {
     	return this;
     }
         
-    public RestAccess post_json_verify_status_content(String relativePath, String requestBody, int statusCode, String jsonPath, String value ) {
+    public RestClient post_json_verify_status_content(String relativePath, String requestBody, int statusCode, String jsonPath, String value ) {
     	RestAssured
     		.given()
     			.contentType(ContentType.JSON)
@@ -183,7 +183,7 @@ public class RestAccess {
     	return this;
     }
     
-    public RestAccess post_verify_status_content(String relativePath, RequestSpecification requestSpec,ResponseSpecification responseSpec) {
+    public RestClient post_verify_status_content(String relativePath, RequestSpecification requestSpec,ResponseSpecification responseSpec) {
     	loadCertificates(requestSpec);
     	RestAssured
     		.given()
@@ -196,7 +196,7 @@ public class RestAccess {
     	return this;
     }
     
-    public RestAccess put_xml_verify_status(String relativePath, String requestBody, int statusCode) {
+    public RestClient put_xml_verify_status(String relativePath, String requestBody, int statusCode) {
     	RestAssured
     		.given()
     			.contentType(ContentType.XML)
@@ -209,7 +209,7 @@ public class RestAccess {
     	return this;
     }
     
-    public RestAccess put_xml_verify_content(String relativePath, String requestBody, String xpath, String value ) {
+    public RestClient put_xml_verify_content(String relativePath, String requestBody, String xpath, String value ) {
     	RestAssured
     		.given()
     			.contentType(ContentType.XML)
@@ -223,7 +223,7 @@ public class RestAccess {
     	return this;
     }
         
-    public RestAccess put_xml_verify_status_content(String relativePath, String requestBody, int statusCode, String xpath, String value ) {
+    public RestClient put_xml_verify_status_content(String relativePath, String requestBody, int statusCode, String xpath, String value ) {
     	RestAssured
     		.given()
     			.contentType(ContentType.XML)
@@ -237,7 +237,7 @@ public class RestAccess {
     	return this;
     }
     
-    public RestAccess put_json_verify_status(String relativePath, String requestBody, int statusCode) {
+    public RestClient put_json_verify_status(String relativePath, String requestBody, int statusCode) {
     	RestAssured
     		.given()
     			.contentType(ContentType.JSON)
@@ -250,7 +250,7 @@ public class RestAccess {
     	return this;
     }
     
-    public RestAccess put_json_verify_content(String relativePath, String requestBody, String jsonPath, String value ) {
+    public RestClient put_json_verify_content(String relativePath, String requestBody, String jsonPath, String value ) {
     	RestAssured
     		.given()
     			.contentType(ContentType.JSON)
@@ -264,7 +264,7 @@ public class RestAccess {
     	return this;
     }
         
-    public RestAccess put_json_verify_status_content(String relativePath, String requestBody, int statusCode, String jsonPath, String value ) {
+    public RestClient put_json_verify_status_content(String relativePath, String requestBody, int statusCode, String jsonPath, String value ) {
     	RestAssured
     		.given()
     			.contentType(ContentType.JSON)
@@ -278,7 +278,7 @@ public class RestAccess {
     	return this;
     }
     
-    public RestAccess put_verify_status_content(String relativePath, RequestSpecification requestSpec,ResponseSpecification responseSpec) {
+    public RestClient put_verify_status_content(String relativePath, RequestSpecification requestSpec,ResponseSpecification responseSpec) {
     	loadCertificates(requestSpec);
     	RestAssured
     		.given()
@@ -291,7 +291,7 @@ public class RestAccess {
     	return this;
     }
     
-    public RestAccess delete_verify_status(String relativePath, int statusCode) {
+    public RestClient delete_verify_status(String relativePath, int statusCode) {
     	RestAssured
     		.expect()
     			.statusCode(statusCode)
@@ -301,7 +301,7 @@ public class RestAccess {
     	return this;
     }
     
-    public RestAccess delete_verify_content_xml(String relativePath,String xpath, String value ) {
+    public RestClient delete_verify_content_xml(String relativePath,String xpath, String value ) {
     	RestAssured
     		.when()
     			.delete(getConfigParamValue("baseUrl")+ relativePath)
@@ -312,7 +312,7 @@ public class RestAccess {
     	return this;
     }
     
-    public RestAccess delete_verify_content_json(String relativePath,String jsonPath, String value ) {
+    public RestClient delete_verify_content_json(String relativePath,String jsonPath, String value ) {
     	RestAssured
     		.when()
     			.delete(getConfigParamValue("baseUrl")+ relativePath)
@@ -323,7 +323,7 @@ public class RestAccess {
     	return this;
     }
         
-    public RestAccess delete_verify_status_content_xml(String relativePath, int statusCode, String xpath, String value ) {
+    public RestClient delete_verify_status_content_xml(String relativePath, int statusCode, String xpath, String value ) {
     	RestAssured
     		.expect()
     			.statusCode(statusCode)
@@ -334,7 +334,7 @@ public class RestAccess {
     	return this;
     }
     
-    public RestAccess delete_verify_status_content_json(String relativePath, int statusCode, String jsonPath, String value ) {
+    public RestClient delete_verify_status_content_json(String relativePath, int statusCode, String jsonPath, String value ) {
     	RestAssured
     		.expect()
     			.statusCode(statusCode)
@@ -345,7 +345,7 @@ public class RestAccess {
     	return this;
     }
     
-    public RestAccess delete_verify_status_content(String relativePath, RequestSpecification requestSpec,ResponseSpecification responseSpec) {
+    public RestClient delete_verify_status_content(String relativePath, RequestSpecification requestSpec,ResponseSpecification responseSpec) {
     	loadCertificates(requestSpec);
     	RestAssured
     		.given()
