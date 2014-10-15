@@ -7,6 +7,7 @@ package com.ghx.auto.core.support;
 import static org.hamcrest.core.StringContains.containsString;
 import static org.hamcrest.xml.HasXPath.hasXPath;
 
+import java.io.File;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
@@ -364,6 +365,68 @@ public class RestClient {
     
     public ResponseSpecification build_response_spec() {
     	return new ResponseSpecBuilder().build();
+    }
+    
+    public RestClient add_header(String name, String value) {
+    	RestAssured
+    		.given()	
+    			.header(name, value);
+    	return this;
+    }
+    
+    public RestClient add_url_param(String name, String value) {
+    	RestAssured
+    		.given()
+    			.queryParam(name, value);
+    	
+    	return this;
+    }
+    
+    public RestClient add_form_data(String name, String value) {
+    	RestAssured
+    		.given()
+    			.multiPart(name, value);
+    	
+    	return this;
+    }
+    
+    public RestClient add_form_data(String name, String value, String mimeType) {
+    	RestAssured
+    		.given()
+    			.multiPart(name, value, mimeType);
+    	
+    	return this;
+    }
+    
+    public RestClient add_form_file(String name, String filePath) {
+    	RestAssured
+    		.given()
+    			.multiPart(name, new File(filePath));
+    	return this;
+    }
+    
+    public RestClient add_to_body(String content) {
+    	RestAssured
+    		.given()
+    			.body(content);
+    	
+    	return this;
+    }
+    
+    public RestClient add_file_content_to_body(String path) {
+    	RestAssured
+    		.given()
+    			.body(new File(path));
+    	
+    	return this;
+    }
+    
+    public RestClient basic_authentication(String username, String password) {
+    	RestAssured
+    		.given()
+    			.auth().basic(username, password);
+    	
+    	return this;
     }
     
     private void loadCertificates() {
