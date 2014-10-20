@@ -215,6 +215,12 @@ public abstract class AbstractPage<T extends AbstractPage<T>> {
         return me();
     }
     
+    public T select_by_name(By locator, String name) {
+    	Select selectable = findSelect(locator);
+        selectable.selectByVisibleText(name);
+        return me();
+    }
+    
     public T deselect_all(By locator) {
     	Select selectable = findSelect(locator);
         selectable.deselectAll();
