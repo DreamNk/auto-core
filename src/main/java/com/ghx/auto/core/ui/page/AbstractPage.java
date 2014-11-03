@@ -378,6 +378,18 @@ public abstract class AbstractPage<T extends AbstractPage<T>> {
 
 		return me();
 	}
+	
+	public T wait_until_text_appears_on_page(final String text) {
+		verify(new ExpectedCondition<Boolean>() {
+
+			@Override
+			public Boolean apply(WebDriver driver) {
+				return driver.getPageSource().contains(text);
+			}
+		});
+
+		return me();
+	}
   
     private WebElement findElement(By locator) {
         return verify(ExpectedConditions.presenceOfElementLocated(locator));
