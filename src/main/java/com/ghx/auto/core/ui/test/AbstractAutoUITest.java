@@ -32,11 +32,15 @@ public abstract class AbstractAutoUITest {
 	private DriverContext driverContext;
 
     private EnvConfig envConfig;
+    
+    private ITestContext context;
 
     protected SqlSessionFactory sessionFactory;
 
     @BeforeClass(alwaysRun=true)
     public void beforeTest(ITestContext context) {
+    	this.context = context;
+    	
         Object driverContext = context.getAttribute(DriverContext.class.getName());
         Assert.assertNotNull(driverContext, "No driver context provided in test context,");
         this.driverContext = (DriverContext) driverContext;
@@ -149,6 +153,25 @@ public abstract class AbstractAutoUITest {
      */
     protected RestClient getRestClient(String section) {
     	return new RestClient(envConfig, section);
+    }
+    
+    /**
+     * Store the new attribute in test context.
+     *
+     * @param name String Attribute name.
+     * @param value String Attribute value.
+     */
+    protected void store_test_data(String name, String value) {
+    	context.setAttribute(name, value);
+    }
+    
+    /**
+     * Retrieve the attribute from to test context.
+     *
+     * @param name String Attribute name.
+     */
+    protected String retrieve_test_data(String name) {
+    	return (String) context.getAttribute(name);
     }
     
     /**
