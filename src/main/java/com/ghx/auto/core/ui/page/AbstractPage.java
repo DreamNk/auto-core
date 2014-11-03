@@ -263,6 +263,18 @@ public abstract class AbstractPage<T extends AbstractPage<T>> {
   		return findElement(locator).getText();
   	}
   	
+  	public boolean is_text_present_on_page(String text) {
+		return driver.getPageSource().contains(text);
+  	}
+	
+	public int find_element_count(By locator) {
+		return driver.findElements(locator).size();
+  	}
+	
+	public String find_element_text_without_wait(By locator) {
+		return driver.findElement(locator).getText();
+  	}
+  	
   	public String find_current_url() {
   		return this.driver.getCurrentUrl();
   	}
