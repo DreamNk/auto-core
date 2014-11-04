@@ -292,6 +292,11 @@ public abstract class AbstractPage<T extends AbstractPage<T>> {
     public void refresh_page() {
     	driver.navigate().refresh();
     }
+    
+    protected T clear_session() {
+    	driver.manage().deleteAllCookies();
+    	return me();
+    }
 
   	 @SuppressWarnings("unchecked")
      protected T me() {
