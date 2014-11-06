@@ -29,6 +29,8 @@ public class DriverContext {
 		this.envConfig = config;
 		this.env = env;
 		this.driver = createDriver();
+        maximize();
+
 	}
 	
 	public WebDriver getDriver() {
@@ -77,7 +79,7 @@ public class DriverContext {
         return null;
 	}
 	
-	public void quitDrivers() {
+  	public void quitDrivers() {
         if (secondaryDriver != null) {
         	secondaryDriver.quit();
         }
@@ -85,4 +87,10 @@ public class DriverContext {
         	driver.quit();
         }
 	}
+  	
+    private WebDriver maximize() {
+        driver.manage().window().maximize();
+        return driver;
+    }
+
 }
