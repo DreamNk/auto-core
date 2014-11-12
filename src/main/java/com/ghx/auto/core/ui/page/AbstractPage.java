@@ -8,6 +8,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Map;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 import java.util.concurrent.Callable;
@@ -320,7 +321,11 @@ public abstract class AbstractPage<T extends AbstractPage<T>> {
      * @return parameter value
      */
     protected String getConfigParamValue(String param) {
-    	String paramValue =  this.envConfig.get(getApplicationId().toUpperCase()).get(param);
+    	Map<String, String> section = this.envConfig.get(getApplicationId().toUpperCase());
+    	Assert.assertNotNull(section, "No configuration section provided in configuration file with the name: " 
+    													+ getApplicationId().toUpperCase());
+    	
+    	String paramValue =  section.get(param);
     	Assert.assertNotNull(StringUtils.defaultIfBlank(paramValue, null),
                 "No configuration provided for the param: " + param
                         + ",under section: " + getApplicationId().toUpperCase());
