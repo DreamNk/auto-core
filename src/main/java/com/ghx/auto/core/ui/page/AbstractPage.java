@@ -109,6 +109,17 @@ public abstract class AbstractPage<T extends AbstractPage<T>> {
         return me();
     }
     
+    public T wait_until(int sleepInSecs) {
+    	try {
+    	Thread.sleep(sleepInSecs*1000);
+    	}
+    	catch(IllegalArgumentException | InterruptedException ie) {
+    		Assert.fail("Unable to wait for the given time(in secs): " + sleepInSecs );
+    	}
+    	
+    	return me();
+    }
+    
 	public T wait_until(final ExpectedCondition<Boolean> condition,
 			final Callable action, long timeOutInSeconds, long sleepInMillis) {
 
