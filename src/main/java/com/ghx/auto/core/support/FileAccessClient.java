@@ -11,6 +11,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Writer;
+import java.util.Map;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -22,19 +23,19 @@ import com.jcraft.jsch.ChannelSftp;
 import com.jcraft.jsch.JSch;
 import com.jcraft.jsch.Session;
 
-public class FileTransfer {
+public class FileAccessClient {
 	
 	public static final String FILE_PATH_APPENDER = "/"; 
 	
     private EnvConfig envConfig;
     private String section;
     
-    public FileTransfer(EnvConfig envConfig, String section) {
+    public FileAccessClient(EnvConfig envConfig, String section) {
     	this.envConfig = envConfig;
     	this.section = section;
     }
     
-	public FileTransfer send_file_via_sFtp(File srcFile,String destFileName) {
+	public FileAccessClient send_file_via_sFtp(File srcFile,String destFileName) {
 		String srcFileStr = "";
 		try {
 			srcFileStr = FileUtils.readFileToString(srcFile);
@@ -44,7 +45,7 @@ public class FileTransfer {
 		return send_file_via_sFtp(srcFileStr,destFileName);
 	}
 	
-	public FileTransfer send_file_via_sFtp(String srcFile,String destFileName) {
+	public FileAccessClient send_file_via_sFtp(String srcFile,String destFileName) {
 
 		InputStream stream = new ByteArrayInputStream(srcFile.getBytes());
 
@@ -79,7 +80,7 @@ public class FileTransfer {
 		return this;
 	}
 	
-	public FileTransfer store_file_to_local(File srcFile,String destFileName) {
+	public FileAccessClient store_file_to_local(File srcFile,String destFileName) {
 		File destFile = new File(getConfigParamValue("destFilePath") + FILE_PATH_APPENDER + destFileName);
 		try {
 			FileUtils.copyFile(srcFile, destFile);
@@ -89,7 +90,7 @@ public class FileTransfer {
 		return this;
 	}
 	
-	public FileTransfer store_file_to_local(String srcFile, String destFileName) {
+	public FileAccessClient store_file_to_local(String srcFile, String destFileName) {
 		Writer output = null;
 		File file = new File(getConfigParamValue("destFilePath") + FILE_PATH_APPENDER + destFileName);
 		try {
@@ -102,11 +103,27 @@ public class FileTransfer {
 		return this;
 	}
 	
+	public String read_file_from_local(String srcFileName) {
+		return read_file_from_local(getConfigParamValue("srcFilePath"), srcFileName);
+	}
+	
+	public String read_file_from_local(String srcFilePath, String srcFileName) {
+		File srcFile = new File(srcFilePath + FILE_PATH_APPENDER + srcFileName);
+		try {
+			return FileUtils.readFileToString(srcFile);
+		} catch (IOException e) {
+			Assert.fail("Failure reading file " + srcFileName + ", path: " + srcFilePath + ".");
+		}
+		return null; // this should not happen
+	}
+	
     private String getConfigParamValue(String param) {
-    	String paramValue =  this.envConfig.get(section.toUpperCase()).get(param);
+    	Map<String, String> section = this.envConfig.get(this.section.toUpperCase());
+    	Assert.assertNotNull(section, "No configuration section provided in configuration file with the name: " + this.section.toUpperCase());
+    	String paramValue =  section.get(param);
     	Assert.assertNotNull(StringUtils.defaultIfBlank(paramValue, null),
                 "No configuration provided for the param: " + param
-                        + ",under section: " + section.toUpperCase());
+                        + ",under section: " + this.section.toUpperCase());
     	return paramValue;
     }
 

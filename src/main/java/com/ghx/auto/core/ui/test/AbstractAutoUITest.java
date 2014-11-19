@@ -18,7 +18,7 @@ import org.testng.annotations.BeforeClass;
 
 import com.ghx.auto.core.db.domain.Scenario;
 import com.ghx.auto.core.db.mapper.Mapper;
-import com.ghx.auto.core.support.FileTransfer;
+import com.ghx.auto.core.support.FileAccessClient;
 import com.ghx.auto.core.support.RestClient;
 import com.ghx.auto.core.ui.page.AbstractPage;
 import com.ghx.auto.core.ui.support.Alert;
@@ -138,12 +138,12 @@ public abstract class AbstractAutoUITest {
     }
     
     /**
-     * Get File Transfer Utility.
+     * Get File Access Utility.
      *
      * @param section Environment Configuration Section to be referred.
      */
-    protected FileTransfer getFileTransfer(String section) {
-    	return new FileTransfer(envConfig, section);
+    protected FileAccessClient getFileAccessClient(String section) {
+    	return new FileAccessClient(envConfig, section);
     }
 
     /**
