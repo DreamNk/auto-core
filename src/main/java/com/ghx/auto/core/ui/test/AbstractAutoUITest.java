@@ -18,7 +18,7 @@ import org.testng.annotations.BeforeClass;
 
 import com.ghx.auto.core.db.domain.Scenario;
 import com.ghx.auto.core.db.mapper.Mapper;
-import com.ghx.auto.core.support.FileTransfer;
+import com.ghx.auto.core.support.FileAccessClient;
 import com.ghx.auto.core.support.RestClient;
 import com.ghx.auto.core.ui.page.AbstractPage;
 import com.ghx.auto.core.ui.support.Alert;
@@ -32,11 +32,15 @@ public abstract class AbstractAutoUITest {
 	private DriverContext driverContext;
 
     private EnvConfig envConfig;
+    
+    private ITestContext context;
 
     protected SqlSessionFactory sessionFactory;
 
     @BeforeClass(alwaysRun=true)
     public void beforeTest(ITestContext context) {
+    	this.context = context;
+    	
         Object driverContext = context.getAttribute(DriverContext.class.getName());
         Assert.assertNotNull(driverContext, "No driver context provided in test context,");
         this.driverContext = (DriverContext) driverContext;
@@ -134,12 +138,12 @@ public abstract class AbstractAutoUITest {
     }
     
     /**
-     * Get File Transfer Utility.
+     * Get File Access Utility.
      *
      * @param section Environment Configuration Section to be referred.
      */
-    protected FileTransfer getFileTransfer(String section) {
-    	return new FileTransfer(envConfig, section);
+    protected FileAccessClient getFileAccessClient(String section) {
+    	return new FileAccessClient(envConfig, section);
     }
 
     /**
@@ -149,6 +153,25 @@ public abstract class AbstractAutoUITest {
      */
     protected RestClient getRestClient(String section) {
     	return new RestClient(envConfig, section);
+    }
+    
+    /**
+     * Store the new attribute in test context.
+     *
+     * @param name String Attribute name.
+     * @param value String Attribute value.
+     */
+    protected void store_test_data(String name, String value) {
+    	context.setAttribute(name, value);
+    }
+    
+    /**
+     * Retrieve the attribute from to test context.
+     *
+     * @param name String Attribute name.
+     */
+    protected String retrieve_test_data(String name) {
+    	return (String) context.getAttribute(name);
     }
     
     /**

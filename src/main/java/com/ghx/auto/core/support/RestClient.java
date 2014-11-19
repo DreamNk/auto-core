@@ -26,7 +26,6 @@ import com.jayway.restassured.response.ValidatableResponse;
 import com.jayway.restassured.specification.RequestSpecification;
 import com.jayway.restassured.specification.ResponseSpecification;
 
-
 public class RestClient {
 	
     private EnvConfig envConfig;
@@ -319,11 +318,14 @@ public class RestClient {
     }
     
     private String getConfigParamValue(String section, String param) {
-    	String paramValue =  this.envConfig.get(section.toUpperCase()).get(param);
+    	Map<String, String> configSection = this.envConfig.get(section.toUpperCase());
+    	Assert.assertNotNull(configSection, "No configuration section provided in configuration file with the name: " + section.toUpperCase());
+    	String paramValue =  configSection.get(param);
     	Assert.assertNotNull(StringUtils.defaultIfBlank(paramValue, null),
                 "No configuration provided for the param: " + param
                         + ",under section: " + section.toUpperCase());
     	return paramValue;
+    	
     }
     
     private File getFile(String path) {
