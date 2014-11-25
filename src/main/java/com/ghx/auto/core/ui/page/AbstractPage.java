@@ -309,6 +309,11 @@ public abstract class AbstractPage<T extends AbstractPage<T>> {
     	driver.manage().deleteAllCookies();
     	return me();
     }
+    
+    public T switch_to_frame(String nameOrId) {
+    	driver.switchTo().frame(nameOrId);
+    	return me();
+    }
 
   	 @SuppressWarnings("unchecked")
      protected T me() {
