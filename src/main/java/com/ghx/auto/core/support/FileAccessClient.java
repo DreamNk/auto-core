@@ -15,6 +15,7 @@ import java.util.Map;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.net.ftp.FTPClient;
 import org.testng.Assert;
 
 import com.ghx.auto.core.ui.support.EnvConfig;
@@ -77,6 +78,55 @@ public class FileAccessClient {
 				}
 			}
 		}
+		return this;
+	}
+	
+	public FileAccessClient send_file_via_ftp(File srcFile,String destFileName) {
+		String content = "";
+		try {
+			content = FileUtils.readFileToString(srcFile);
+		} catch (IOException e) {
+			Assert.fail("Failure reading file " + srcFile.getName() + " from path: " + srcFile.getPath() + ".");
+		}
+		return send_file_via_ftp(content,destFileName);
+	}
+	
+	public FileAccessClient send_file_via_ftp(String content,String destFileName) {
+		Boolean loginSuccess = Boolean.FALSE;
+		Boolean changeDirSuccess = Boolean.FALSE;
+		Boolean storeFileSuccess = Boolean.FALSE;
+
+		FTPClient client = new FTPClient();
+		
+		try {
+			client.connect(getConfigParamValue("host"));
+			loginSuccess = client.login(getConfigParamValue("userName"), getConfigParamValue("password"));
+			changeDirSuccess = client.changeWorkingDirectory(getConfigParamValue("destFilePath"));
+			storeFileSuccess = client.storeFile(destFileName, new ByteArrayInputStream(content.getBytes()));
+		} catch (IOException ioe) {
+			Assert.fail("Failure connecting to the host: " + getConfigParamValue("host"));
+		} finally {
+			if(client.isConnected()) {
+				try {
+					client.disconnect();
+				} catch (IOException ioe) {
+					Assert.fail("Unable to disconnect the host: " + getConfigParamValue("host"));
+				}
+			}
+		}
+		
+		if (!loginSuccess) {
+			Assert.fail("Login failed to the host: " + getConfigParamValue("host") + " with the user: " + getConfigParamValue("userName"));
+		}
+		
+		if (!changeDirSuccess) {
+			Assert.fail("Unable to change the directory to: " + getConfigParamValue("destFilePath") + " on the host: " + getConfigParamValue("host"));
+		}
+		
+		if (!storeFileSuccess) {
+			Assert.fail("Unable to transfer the file to the directory: " + getConfigParamValue("destFilePath") + " on the host: " + getConfigParamValue("host"));
+		}
+		
 		return this;
 	}
 	
