@@ -295,6 +295,48 @@ public abstract class AbstractPage<T extends AbstractPage<T>> {
  	  	  verify(ExpectedConditions.elementToBeSelected(locator));
  	  	  return me();
  	}
+ 	
+ 	public T verify_element_disabled(By locator) {
+	  	final WebElement element = findElement(locator);
+	  	  
+	    verify(new ExpectedCondition<Boolean>() {
+
+	    	@Override
+			public Boolean apply(WebDriver driver) {
+				if (!(element.isEnabled())) {
+					return Boolean.TRUE; //element is disabled
+				}
+				return Boolean.FALSE; //element is enabled
+			}
+	    	
+	    	@Override
+	    	public String toString() {
+	    		return String.format("element (%s) to be disabled", element);
+	    	} 
+	    });
+	  	return me();
+	}
+ 	
+ 	public T verify_element_enabled(By locator) {
+	  	final WebElement element = findElement(locator);
+	  	  
+	    verify(new ExpectedCondition<Boolean>() {
+
+	    	@Override
+			public Boolean apply(WebDriver driver) {
+				if (element.isEnabled()) {
+					return Boolean.TRUE; //element is enabled
+				}
+				return Boolean.FALSE; //element is disabled
+			}
+	    	
+	    	@Override
+	    	public String toString() {
+	    		return String.format("element (%s) to be enabled", element);
+	    	} 
+	    });
+	  	return me();
+	}
   	
     public T verify_element_by_text (By locator, String text) {
         verify(ExpectedConditions.textToBePresentInElementLocated(locator, text));
@@ -383,6 +425,11 @@ public abstract class AbstractPage<T extends AbstractPage<T>> {
 			public Boolean apply(WebDriver driver) {
 			    return selectable.getOptions().size() > 1;
 			}
+			
+			@Override
+	    	public String toString() {
+	    		return String.format("element (%s) size > 1", selectable);
+	    	} 
         });
         
         return selectable;
@@ -400,6 +447,11 @@ public abstract class AbstractPage<T extends AbstractPage<T>> {
 				return selectable.getFirstSelectedOption().getText()
 						.equals(option);
 			}
+			
+			@Override
+	    	public String toString() {
+	    		return String.format("element (%s) selected option matches to the required option", selectable);
+	    	}
 		});
 
 		return me();
@@ -412,6 +464,11 @@ public abstract class AbstractPage<T extends AbstractPage<T>> {
 			public Boolean apply(WebDriver driver) {
 				return driver.getPageSource().contains(text);
 			}
+			
+			@Override
+	    	public String toString() {
+	    		return String.format("page contains the text: (%s)", text);
+	    	}
 		});
 
 		return me();
