@@ -100,6 +100,7 @@ public class FileAccessClient {
 		
 		try {
 			client.connect(getConfigParamValue("host"));
+			client.enterLocalPassiveMode();
 			loginSuccess = client.login(getConfigParamValue("userName"), getConfigParamValue("password"));
 			changeDirSuccess = client.changeWorkingDirectory(getConfigParamValue("destFilePath"));
 			storeFileSuccess = client.storeFile(destFileName, new ByteArrayInputStream(content.getBytes()));
