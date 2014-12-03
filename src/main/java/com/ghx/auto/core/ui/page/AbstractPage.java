@@ -353,7 +353,7 @@ public abstract class AbstractPage<T extends AbstractPage<T>> {
     }
     
     public T switch_to_frame(String nameOrId) {
-    	driver.switchTo().frame(nameOrId);
+    	verify(ExpectedConditions.frameToBeAvailableAndSwitchToIt(nameOrId));
     	return me();
     }
 
