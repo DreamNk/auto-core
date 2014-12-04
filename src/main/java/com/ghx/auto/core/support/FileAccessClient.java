@@ -154,17 +154,32 @@ public class FileAccessClient {
 		return this;
 	}
 	
-	public String read_file_from_local(String srcFileName) {
-		return read_file_from_local(getConfigParamValue("srcFilePath"), srcFileName);
+	public String read_local_file(String srcFileName) {
+		return read_local_file(getConfigParamValue("srcFilePath"), srcFileName);
 	}
 	
-	public String read_file_from_local(String srcFilePath, String srcFileName) {
+	public String read_local_file(String srcFilePath, String srcFileName) {
 		File srcFile = new File(srcFilePath + FILE_PATH_APPENDER + srcFileName);
 		try {
 			return FileUtils.readFileToString(srcFile);
 		} catch (IOException e) {
 			Assert.fail("Failure reading file " + srcFileName + ", path: " + srcFilePath + ".");
 		}
+		return null; // this should not happen
+	}
+	
+	public String replace_local_file_content(String srcFileName, String searchString, String replaceString) {
+		return replace_local_file_content(getConfigParamValue("srcFilePath"), srcFileName, searchString, replaceString);
+	}
+	
+	public String replace_local_file_content(String srcFilePath, String srcFileName, String searchString, String replaceString) {
+		File srcFile = new File(srcFilePath + FILE_PATH_APPENDER + srcFileName);
+		try {
+			return StringUtils.replace(FileUtils.readFileToString(srcFile), searchString, replaceString);
+		} catch (IOException e) {
+			Assert.fail("Failure reading file " + srcFileName + ", path: " + srcFilePath + ".");
+		}
+		
 		return null; // this should not happen
 	}
 	
