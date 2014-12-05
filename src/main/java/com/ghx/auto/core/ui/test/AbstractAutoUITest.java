@@ -84,10 +84,6 @@ public abstract class AbstractAutoUITest {
         return null;
     }
 
-    protected WebDriver open_or_focus_secondary_browser() {
-    	return driverContext.getSecondaryDriver();
-    }
-    
     protected  <T extends Mapper<T>> Object[][] get_test_scenario_data(Class<T> mapperClass) {
     	SqlSession session = sessionFactory.openSession();
     	T mapper = session.getMapper(mapperClass);
@@ -135,6 +131,31 @@ public abstract class AbstractAutoUITest {
     
     protected String getEnvId() {
     	return Environment.valueOf(envConfig.getTargetEnv().toUpperCase()).getEnvId();
+    }
+    
+    
+    /**
+     * Open an existing secondary driver or create one if not available.
+     *
+     */
+    protected WebDriver open_or_focus_secondary_browser() {
+    	return driverContext.getSecondaryDriver();
+    }
+    
+    /**
+     * focus on the parent window of the driver.
+     *
+     */
+    protected WebDriver focus_on_parent_window() {
+    	return driverContext.getParentWindow();
+    }
+    
+    /**
+     * focus on the pop-up window of the driver.
+     *
+     */
+    protected WebDriver focus_on_popup_window() {
+    	return driverContext.getPopupWindow();
     }
     
     /**
