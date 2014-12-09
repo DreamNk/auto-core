@@ -302,6 +302,7 @@ public class RestClient {
     
     private void loadCertificates(RequestSpecification requestSpec) {
     	Map<String,String> certificateStores =  this.envConfig.get("CERTIFICATES");
+    	Assert.assertNotNull(certificateStores, "No configuration section provided in configuration file with the name: CERTIFICATES");
     	Set<String> keys = certificateStores.keySet();
     	Iterator<String> itr = keys.iterator();
     	
