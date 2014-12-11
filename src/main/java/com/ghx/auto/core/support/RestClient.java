@@ -22,6 +22,7 @@ import com.ghx.auto.core.ui.support.EnvConfig;
 import com.jayway.restassured.RestAssured;
 import com.jayway.restassured.builder.RequestSpecBuilder;
 import com.jayway.restassured.builder.ResponseSpecBuilder;
+import com.jayway.restassured.http.ContentType;
 import com.jayway.restassured.response.ValidatableResponse;
 import com.jayway.restassured.specification.RequestSpecification;
 import com.jayway.restassured.specification.ResponseSpecification;
@@ -35,6 +36,7 @@ public class RestClient {
     private ValidatableResponse response;
     
     public RestClient(EnvConfig envConfig, String section) {
+    	RestAssured.reset();
     	this.envConfig = envConfig;
     	this.section = section;
     	this.reqSpec = build_request_spec();
@@ -263,6 +265,16 @@ public class RestClient {
     
     public RestClient add_form_file(String name, String path) {
     	reqSpec.multiPart(name, getFile(path));
+    	return this;
+    }
+    
+    public RestClient add_req_content_type(ContentType contentType) {
+    	RestAssured.requestContentType(contentType);
+    	return this;
+    }
+    
+    public RestClient add_res_content_type(ContentType contentType) {
+    	RestAssured.responseContentType(contentType);
     	return this;
     }
     
