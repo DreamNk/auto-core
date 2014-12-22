@@ -36,17 +36,17 @@ public class FileAccessClient {
     	this.section = section;
     }
     
-	public FileAccessClient send_file_via_sFtp(File srcFile,String destFileName) {
+	public FileAccessClient upload_file_via_sFtp(File srcFile,String destFileName) {
 		String srcFileStr = "";
 		try {
 			srcFileStr = FileUtils.readFileToString(srcFile);
 		} catch (IOException e) {
 			Assert.fail("Failure reading file " + srcFile.getName() + " from path: " + srcFile.getPath() + ".");
 		}
-		return send_file_via_sFtp(srcFileStr,destFileName);
+		return upload_file_via_sFtp(srcFileStr,destFileName);
 	}
 	
-	public FileAccessClient send_file_via_sFtp(String srcFile,String destFileName) {
+	public FileAccessClient upload_file_via_sFtp(String srcFile,String destFileName) {
 
 		InputStream stream = new ByteArrayInputStream(srcFile.getBytes());
 
@@ -81,17 +81,17 @@ public class FileAccessClient {
 		return this;
 	}
 	
-	public FileAccessClient send_file_via_ftp(File srcFile,String destFileName) {
+	public FileAccessClient upload_file_via_ftp(File srcFile,String destFileName) {
 		String content = "";
 		try {
 			content = FileUtils.readFileToString(srcFile);
 		} catch (IOException e) {
 			Assert.fail("Failure reading file " + srcFile.getName() + " from path: " + srcFile.getPath() + ".");
 		}
-		return send_file_via_ftp(content,destFileName);
+		return upload_file_via_ftp(content,destFileName);
 	}
 	
-	public FileAccessClient send_file_via_ftp(String content,String destFileName) {
+	public FileAccessClient upload_file_via_ftp(String content,String destFileName) {
 		Boolean loginSuccess = Boolean.FALSE;
 		Boolean changeDirSuccess = Boolean.FALSE;
 		Boolean storeFileSuccess = Boolean.FALSE;
@@ -102,8 +102,19 @@ public class FileAccessClient {
 			client.connect(getConfigParamValue("host"));
 			client.enterLocalPassiveMode();
 			loginSuccess = client.login(getConfigParamValue("userName"), getConfigParamValue("password"));
+			if (!loginSuccess) {
+				Assert.fail("Login failed to the host: " + getConfigParamValue("host") + " with the user: " + getConfigParamValue("userName"));
+			}
+			
 			changeDirSuccess = client.changeWorkingDirectory(getConfigParamValue("destFilePath"));
+			if (!changeDirSuccess) {
+				Assert.fail("Unable to change the directory to: " + getConfigParamValue("destFilePath") + " on the host: " + getConfigParamValue("host"));
+			}
+			
 			storeFileSuccess = client.storeFile(destFileName, new ByteArrayInputStream(content.getBytes()));
+			if (!storeFileSuccess) {
+				Assert.fail("Unable to transfer the file to the directory: " + getConfigParamValue("destFilePath") + " on the host: " + getConfigParamValue("host"));
+			}
 		} catch (IOException ioe) {
 			Assert.fail("Failure connecting to the host: " + getConfigParamValue("host"));
 		} finally {
@@ -115,22 +126,48 @@ public class FileAccessClient {
 				}
 			}
 		}
-		
-		if (!loginSuccess) {
-			Assert.fail("Login failed to the host: " + getConfigParamValue("host") + " with the user: " + getConfigParamValue("userName"));
-		}
-		
-		if (!changeDirSuccess) {
-			Assert.fail("Unable to change the directory to: " + getConfigParamValue("destFilePath") + " on the host: " + getConfigParamValue("host"));
-		}
-		
-		if (!storeFileSuccess) {
-			Assert.fail("Unable to transfer the file to the directory: " + getConfigParamValue("destFilePath") + " on the host: " + getConfigParamValue("host"));
-		}
-		
 		return this;
 	}
 	
+	public FileAccessClient download_file_via_ftp(String srcFileName) {
+		Boolean loginSuccess = Boolean.FALSE;
+		Boolean changeDirSuccess = Boolean.FALSE;
+
+		FTPClient client = new FTPClient();
+		try {
+			client.connect(getConfigParamValue("host"));
+			client.enterLocalPassiveMode();
+			
+			loginSuccess = client.login(getConfigParamValue("userName"), getConfigParamValue("password"));
+			if (!loginSuccess) {
+				Assert.fail("Login failed to the host: " + getConfigParamValue("host") + " with the user: " + getConfigParamValue("userName"));
+			}
+				
+			changeDirSuccess = client.changeWorkingDirectory(getConfigParamValue("srcFilePath"));
+			if (!changeDirSuccess) {
+				Assert.fail("Unable to change the directory to: " + getConfigParamValue("srcFilePath") + " on the host: " + getConfigParamValue("host"));
+			}
+				
+			InputStream inputStream = client.retrieveFileStream(srcFileName);
+			if(inputStream != null){
+				FileUtils.copyInputStreamToFile(inputStream, new File(getConfigParamValue("destFilePath") + FILE_PATH_APPENDER + srcFileName));
+			}else{
+				Assert.fail("Unable to download the file to the directory: " + getConfigParamValue("destFilePath"));
+			}
+			
+		} catch (IOException ioe) {
+			Assert.fail("Failure connecting to the host: " + getConfigParamValue("host"));
+		} finally {
+			try {
+				if(client.isConnected()) 
+					client.disconnect();
+			} catch (IOException ioe) {
+					Assert.fail("Unable to disconnect the host: " + getConfigParamValue("host"));
+			}
+		}
+		return this;
+	}
+
 	public FileAccessClient store_file_to_local(File srcFile,String destFileName) {
 		File destFile = new File(getConfigParamValue("destFilePath") + FILE_PATH_APPENDER + destFileName);
 		try {
