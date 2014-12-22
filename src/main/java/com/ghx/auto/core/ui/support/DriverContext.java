@@ -26,24 +26,27 @@ public class DriverContext {
 	private EnvConfig envConfig;
 	private String env;
 	private String parentWindow;
-	private WebDriver driver;
+	private WebDriver primaryDriver;
 	private WebDriver secondaryDriver;
 	
 	public DriverContext(EnvConfig config, String env) {
 		this.envConfig = config;
 		this.env = env;
-		this.driver = createDriver();
-		this.parentWindow = driver.getWindowHandle();
-        maximize();
 	}
-	
-	public WebDriver getDriver() {
-        return driver;
+
+	public WebDriver getPrimaryDriver() {
+        if (primaryDriver == null) {
+        	this.primaryDriver = createDriver();
+        	this.parentWindow = primaryDriver.getWindowHandle();
+        	maximize(this.primaryDriver);
+        }	
+        return primaryDriver;
 	}
 	
 	public WebDriver getSecondaryDriver() {
         if (secondaryDriver == null) {
         	secondaryDriver = createDriver();
+        	maximize(this.secondaryDriver);
         }
         return secondaryDriver;
 	}
@@ -78,17 +81,18 @@ public class DriverContext {
             }
         }
         
-        Assert.assertNotNull(driver, "Unable to create driver instance:, ");
-        // should not happen
+        Assert.fail("Unable to create driver instance:, ");
+        
+        //this will not happen
         return null;
 	}
 	
 	public WebDriver getParentWindow() {
-		return driver.switchTo().window(this.parentWindow);
+		return primaryDriver.switchTo().window(this.parentWindow);
 	}
 	
 	public WebDriver getPopupWindow() {
-		new WebDriverWait(driver, envConfig.getTimeout(), 100).until(new ExpectedCondition<Boolean> () {
+		new WebDriverWait(primaryDriver, envConfig.getTimeout(), 100).until(new ExpectedCondition<Boolean> () {
     		@Override
     		public Boolean apply(WebDriver driver) {
     			Set<String> windowHandles = driver.getWindowHandles();
@@ -102,10 +106,10 @@ public class DriverContext {
     	});
 		
 		WebDriver popup = null;
-		Set<String> windowHandles = driver.getWindowHandles();
+		Set<String> windowHandles = primaryDriver.getWindowHandles();
 		for (String windowHandle : windowHandles) {
 			if (!windowHandle.equals(this.parentWindow)) {
-				popup = driver.switchTo().window(windowHandle);
+				popup = primaryDriver.switchTo().window(windowHandle);
 			}
 		}
 		
@@ -118,12 +122,12 @@ public class DriverContext {
         if (secondaryDriver != null) {
         	secondaryDriver.quit();
         }
-        if (driver != null) {
-        	driver.quit();
+        if (primaryDriver != null) {
+        	primaryDriver.quit();
         }
 	}
   	
-    private WebDriver maximize() {
+    private WebDriver maximize(WebDriver driver) {
         driver.manage().window().maximize();
         return driver;
     }

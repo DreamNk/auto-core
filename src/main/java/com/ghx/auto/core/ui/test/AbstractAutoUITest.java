@@ -57,7 +57,7 @@ public abstract class AbstractAutoUITest {
     }
 
     protected <T extends AbstractPage<T>> T get(Class<T> pageClass) {
-    	return get(pageClass,this.driverContext.getDriver());
+    	return get(pageClass,this.driverContext.getPrimaryDriver());
     }
     
     protected <T extends AbstractPage<T>> T get(Class<T> pageClass, WebDriver pageDriver) {
