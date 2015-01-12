@@ -356,11 +356,16 @@ public abstract class AbstractPage<T extends AbstractPage<T>> {
     	verify(ExpectedConditions.frameToBeAvailableAndSwitchToIt(nameOrId));
     	return me();
     }
+    
+    public T switch_to_frame(By locator) {
+    	verify(ExpectedConditions.frameToBeAvailableAndSwitchToIt(locator));
+    	return me();
+    }
 
-  	 @SuppressWarnings("unchecked")
-     protected T me() {
-         return (T) this;
-     }
+  	@SuppressWarnings("unchecked")
+    protected T me() {
+        return (T) this;
+    }
   	 
   	protected T click(By locator) {
         WebElement clickable = findElement(ExpectedConditions.elementToBeClickable(locator));
