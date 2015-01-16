@@ -361,6 +361,11 @@ public abstract class AbstractPage<T extends AbstractPage<T>> {
     	verify(ExpectedConditions.frameToBeAvailableAndSwitchToIt(locator));
     	return me();
     }
+    
+    public T switch_to_root_page() {
+    	driver.switchTo().defaultContent();
+    	return me();
+    }
 
   	@SuppressWarnings("unchecked")
     protected T me() {
