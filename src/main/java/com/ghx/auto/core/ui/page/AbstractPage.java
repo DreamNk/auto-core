@@ -188,6 +188,18 @@ public abstract class AbstractPage<T extends AbstractPage<T>> {
         }
         return me();
     }
+    
+    public T browse_file(By locator, String filePath) {
+    	WebElement browsePath = findElement(locator); 
+        try {
+        	browsePath.sendKeys(filePath);
+        }
+        catch (StaleElementReferenceException ex) {
+        	browsePath = findElement(locator);
+        	browsePath.sendKeys(filePath);
+        }
+        return me();
+    }
 
     public T scan(By locator, String barcode) {
         WebElement body = findElement(locator);
