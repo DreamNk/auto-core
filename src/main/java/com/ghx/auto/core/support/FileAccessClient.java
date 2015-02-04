@@ -220,6 +220,17 @@ public class FileAccessClient {
 		return null; // this should not happen
 	}
 	
+	public FileAccessClient compare_files_content(File file1,File file2) {
+		boolean contentEquals = Boolean.FALSE;
+		try {
+			contentEquals = FileUtils.contentEquals(file1, file2);
+		} catch (IOException e) {
+			Assert.fail("Failure comparing files: " + file1.getName() + " and " + file2.getName());
+		}
+		Assert.assertTrue(contentEquals, "Content of the files " + file1.getName() + " and "+ file2.getName() + " is not same");
+		return this;
+	}
+	
     private String getConfigParamValue(String param) {
     	Map<String, String> section = this.envConfig.get(this.section.toUpperCase());
     	Assert.assertNotNull(section, "No configuration section provided in configuration file with the name: " + this.section.toUpperCase());
