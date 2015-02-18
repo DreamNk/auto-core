@@ -385,6 +385,11 @@ public abstract class AbstractPage<T extends AbstractPage<T>> {
     	mouseover.moveToElement(findElement(locator)).build().perform();
     	return me();
     }
+    
+    protected T drag_n_drop(By source, By target) {
+    	new Actions(driver).dragAndDrop(findElement(source), findElement(target)).perform();
+    	return me();
+    }
 
   	@SuppressWarnings("unchecked")
     protected T me() {
