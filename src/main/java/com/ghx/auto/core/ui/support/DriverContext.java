@@ -69,7 +69,7 @@ public class DriverContext {
         else {
         	switch(browser) {
             case "internet explorer":
-                desiredCapabilities.setCapability(InternetExplorerDriver.NATIVE_EVENTS, false);
+                //desiredCapabilities.setCapability(InternetExplorerDriver.NATIVE_EVENTS, false);
                 desiredCapabilities.setCapability(InternetExplorerDriver.IE_ENSURE_CLEAN_SESSION, true);
             	return new InternetExplorerDriver(desiredCapabilities);
             case "firefox":
