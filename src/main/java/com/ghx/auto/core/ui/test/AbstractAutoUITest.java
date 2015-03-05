@@ -18,6 +18,7 @@ import org.testng.annotations.BeforeClass;
 
 import com.ghx.auto.core.db.domain.Scenario;
 import com.ghx.auto.core.db.mapper.Mapper;
+import com.ghx.auto.core.support.DBClient;
 import com.ghx.auto.core.support.FileAccessClient;
 import com.ghx.auto.core.support.RestClient;
 import com.ghx.auto.core.ui.page.AbstractPage;
@@ -174,6 +175,15 @@ public abstract class AbstractAutoUITest {
      */
     protected RestClient getRestClient(String section) {
     	return new RestClient(envConfig, section);
+    }
+    
+    /**
+     * Get DB Client Utility.
+     *
+     * @param section Environment Configuration Section to be referred.
+     */
+    protected DBClient getDBClient(String section) {
+    	return new DBClient(envConfig, section);
     }
     
     /**

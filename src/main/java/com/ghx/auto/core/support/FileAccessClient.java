@@ -6,12 +6,15 @@ package com.ghx.auto.core.support;
 
 import java.io.BufferedWriter;
 import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Writer;
 import java.util.Map;
+import java.util.zip.GZIPOutputStream;
+import java.util.zip.ZipOutputStream;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -218,6 +221,19 @@ public class FileAccessClient {
 		}
 		
 		return null; // this should not happen
+	}
+	
+	public String compress_file_content(String content) {
+		ByteArrayOutputStream out = new ByteArrayOutputStream();
+		try {
+			GZIPOutputStream  zipout = new GZIPOutputStream(out);
+			zipout.write(content.getBytes());
+			zipout.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+			//Assert.fail("Failure compressing the content");
+		}
+		return out.toString();
 	}
 	
 	public FileAccessClient compare_files_content(File file1,File file2) {
