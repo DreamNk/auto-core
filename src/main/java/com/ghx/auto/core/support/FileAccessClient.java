@@ -7,12 +7,20 @@ package com.ghx.auto.core.support;
 import java.io.BufferedWriter;
 import java.io.ByteArrayInputStream;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.io.Writer;
 import java.util.Map;
 
+import org.apache.commons.compress.archivers.ArchiveException;
+import org.apache.commons.compress.archivers.ArchiveOutputStream;
+import org.apache.commons.compress.archivers.ArchiveStreamFactory;
+import org.apache.commons.compress.archivers.zip.ZipArchiveEntry;
+import org.apache.commons.compress.utils.IOUtils;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.net.ftp.FTPClient;
@@ -229,6 +237,48 @@ public class FileAccessClient {
 		}
 		Assert.assertTrue(contentEquals, "Content of the files " + file1.getName() + " and "+ file2.getName() + " is not same");
 		return this;
+	}
+	
+	
+	public FileAccessClient zip_string(String strToZip, String zipFilePath, String zipFileName, String zipFileEntry) {
+		try {
+			OutputStream zip_output = new FileOutputStream(new File(zipFilePath + FILE_PATH_APPENDER + zipFileName));
+            ArchiveOutputStream logical_zip = new ArchiveStreamFactory().createArchiveOutputStream(ArchiveStreamFactory.ZIP, zip_output);
+
+			logical_zip.putArchiveEntry(new ZipArchiveEntry(zipFileEntry));
+            IOUtils.copy(org.apache.commons.io.IOUtils.toInputStream(strToZip), logical_zip);
+            logical_zip.closeArchiveEntry();
+            logical_zip.finish(); 
+            zip_output.close();
+		} catch (IOException e) {
+			Assert.fail("Unable to create zip file: " + zipFilePath + FILE_PATH_APPENDER + zipFileName);
+		}catch (ArchiveException e) {
+			Assert.fail("Failure compressing String(zip): " + strToZip);
+		}
+		
+		return this;
+	}
+	
+	public FileAccessClient zip_file(String path, String srcFileName, String zipFileName) {
+
+		try {
+			OutputStream zip_output = new FileOutputStream(new File(path + FILE_PATH_APPENDER + zipFileName));
+            ArchiveOutputStream logical_zip = new ArchiveStreamFactory().createArchiveOutputStream(ArchiveStreamFactory.ZIP, zip_output);
+
+			logical_zip.putArchiveEntry(new ZipArchiveEntry(srcFileName));
+            IOUtils.copy(new FileInputStream(new File(path + FILE_PATH_APPENDER + srcFileName)), logical_zip);
+            logical_zip.closeArchiveEntry();
+            logical_zip.finish(); 
+            zip_output.close();
+            
+		} catch (IOException e) {
+			Assert.fail("Unable to find the file specified: " + path + FILE_PATH_APPENDER + srcFileName);
+		}catch (ArchiveException e) {
+			Assert.fail("Failure compressing file(zip): " + path + FILE_PATH_APPENDER + srcFileName);
+		}
+		
+		return this;
+		
 	}
 	
     private String getConfigParamValue(String param) {
