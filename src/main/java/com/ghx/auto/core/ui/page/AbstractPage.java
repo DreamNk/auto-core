@@ -88,6 +88,17 @@ public abstract class AbstractPage<T extends AbstractPage<T>> {
         return me();
     }
     
+    public T load(String baseUrl, String relUrl) {
+        String baseurl = getConfigParamValue(baseUrl);
+
+        Assert.assertNotNull(StringUtils.defaultIfBlank(baseurl+relUrl, null),
+                "No url provided on " + getName()
+                        + ", Cannot perform load(),");
+
+        this.driver.get(baseurl + relUrl);
+        return me();
+    }
+    
     public T refresh_until(final By locator) {
 
     	verify(new ExpectedCondition<Boolean>() {
