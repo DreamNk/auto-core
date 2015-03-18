@@ -14,16 +14,11 @@
 	<description>Core framework for Automation</description>
 	
 	<distributionManagement>
-  		<repository>
-   			<id>GHX</id>
-   			<name>GHX Artifactory-releases</name>
-   			<url>http://scmart01.ghx.com:8081/artifactory/casexpert</url>
-  		</repository>
   		<snapshotRepository>
-   			<id>GHX Snapshot</id>
-   			<name>GHX Artifactory-snapshots</name>
-   			<url>http://scmart01.ghx.com:8081/artifactory/casexpert-snapshot</url>
-  		</snapshotRepository>
+        	<id>GHX Artifactory</id>
+        	<name>GHX Artifactory-snapshots</name>
+        	<url>http://scmart01.ghx.com:8081/artifactory/TestAutomation-snapshot</url>
+    	</snapshotRepository>
  	</distributionManagement>
 
 	<properties>
