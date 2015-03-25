@@ -320,6 +320,11 @@ public abstract class AbstractPage<T extends AbstractPage<T>> {
  	  	  return me();
  	}
  	
+ 	public Boolean is_element_selected(By locator) {
+ 		  WebElement element = findElement(locator);
+ 		  return element.isSelected();
+	}
+ 	
  	public T verify_element_disabled(By locator) {
 	  	final WebElement element = findElement(locator);
 	  	  
