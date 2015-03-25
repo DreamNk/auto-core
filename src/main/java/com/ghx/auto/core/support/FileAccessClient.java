@@ -213,6 +213,16 @@ public class FileAccessClient {
 		return null; // this should not happen
 	}
 	
+	public byte[] read_local_fileToByteArray(String srcFilePath, String srcFileName) {
+		File srcFile = new File(srcFilePath + FILE_PATH_APPENDER + srcFileName);
+		try {
+			return FileUtils.readFileToByteArray(srcFile);
+		} catch (IOException e) {
+			Assert.fail("Failure reading file " + srcFileName + ", path: " + srcFilePath + ".");
+		}
+		return null; // this should not happen
+	}
+	
 	public String replace_local_file_content(String srcFileName, String searchString, String replaceString) {
 		return replace_local_file_content(getConfigParamValue("srcFilePath"), srcFileName, searchString, replaceString);
 	}
