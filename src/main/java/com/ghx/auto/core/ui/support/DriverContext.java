@@ -130,7 +130,7 @@ public class DriverContext {
     		@Override
     		public Boolean apply(WebDriver driver) {
     			Set<String> windowHandles = driver.getWindowHandles();
-    			return (windowHandles.size() > 1 && !windowHandles.contains(""));
+    			return (windowHandles.size() > 2 && !windowHandles.contains(""));
     		}
     		
     		@Override
