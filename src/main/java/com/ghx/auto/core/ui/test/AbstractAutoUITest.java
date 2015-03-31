@@ -151,11 +151,19 @@ public abstract class AbstractAutoUITest {
     }
     
     /**
-     * focus on the pop-up window of the driver.
+     * focus on the pop-up window 1 of the driver.
      *
      */
     protected WebDriver focus_on_popup_window() {
-    	return driverContext.getPopupWindow();
+    	return driverContext.getPopupWindow_1();
+    }
+    
+    /**
+     * focus on the pop-up window 2 of the driver.
+     *
+     */
+    protected WebDriver focus_on_popup_window_2() {
+    	return driverContext.getPopupWindow_2();
     }
     
     /**

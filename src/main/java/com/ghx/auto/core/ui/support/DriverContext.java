@@ -10,6 +10,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
@@ -26,6 +27,8 @@ public class DriverContext {
 	private EnvConfig envConfig;
 	private String env;
 	private String parentWindow;
+	private String popupWindow_1;
+	private String popupWindow_2;
 	private WebDriver primaryDriver;
 	private WebDriver secondaryDriver;
 	
@@ -91,7 +94,7 @@ public class DriverContext {
 		return primaryDriver.switchTo().window(this.parentWindow);
 	}
 	
-	public WebDriver getPopupWindow() {
+	public WebDriver getPopupWindow_1() {
 		new WebDriverWait(primaryDriver, envConfig.getTimeout(), 100).until(new ExpectedCondition<Boolean> () {
     		@Override
     		public Boolean apply(WebDriver driver) {
@@ -106,13 +109,48 @@ public class DriverContext {
     	});
 		
 		WebDriver popup = null;
-		Set<String> windowHandles = primaryDriver.getWindowHandles();
-		for (String windowHandle : windowHandles) {
-			if (!windowHandle.equals(this.parentWindow)) {
-				popup = primaryDriver.switchTo().window(windowHandle);
-			}
+		
+		if (StringUtils.isBlank(this.popupWindow_1)) {
+			Set<String> windowHandles = primaryDriver.getWindowHandles();
+			for (String windowHandle : windowHandles) {
+				if (!windowHandle.equals(this.parentWindow)) {
+					this.popupWindow_1 = windowHandle;
+				}
+		    }
 		}
 		
+		popup = primaryDriver.switchTo().window(this.popupWindow_1);
+        Assert.assertNotNull(popup, "Unable to focus on pop-up window:, ");
+        
+        return  popup;
+	}
+	
+	public WebDriver getPopupWindow_2() {
+		new WebDriverWait(primaryDriver, envConfig.getTimeout(), 100).until(new ExpectedCondition<Boolean> () {
+    		@Override
+    		public Boolean apply(WebDriver driver) {
+    			Set<String> windowHandles = driver.getWindowHandles();
+    			return (windowHandles.size() > 1 && !windowHandles.contains(""));
+    		}
+    		
+    		@Override
+	    	public String toString() {
+	    		return String.format("focusing on the pop-up window");
+	    	} 
+    	});
+		
+		WebDriver popup = null;
+		
+		if (StringUtils.isBlank(this.popupWindow_2)) {
+			Set<String> windowHandles = primaryDriver.getWindowHandles();
+			for (String windowHandle : windowHandles) {
+				if ((!windowHandle.equals(this.parentWindow)) && (!windowHandle.equals(this.popupWindow_1))) {
+					this.popupWindow_2 = windowHandle;
+				}
+		    }
+		}
+		
+		popup = primaryDriver.switchTo().window(this.popupWindow_2);
         Assert.assertNotNull(popup, "Unable to focus on pop-up window:, ");
         
         return  popup;
