@@ -29,8 +29,8 @@ public class DBClient {
     	createJdbcTemplate();
     }
     
-    public DBClient validateDB() {
-    	jdbcTemplate.execute("select username from user where id = 10");
+    public DBClient validateDB(String sql) {
+    	jdbcTemplate.execute(sql);
     	return this;
     }
 	
