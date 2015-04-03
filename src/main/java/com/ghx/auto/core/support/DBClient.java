@@ -29,9 +29,13 @@ public class DBClient {
     	createJdbcTemplate();
     }
     
-    public DBClient validateDB(String sql) {
+    public DBClient executeQuery(String sql) {
     	jdbcTemplate.execute(sql);
     	return this;
+    }
+    
+    public Map get_rowData_as_Map(String sql) {
+    	return jdbcTemplate.queryForMap(sql);
     }
 	
 	private void createJdbcTemplate() {
