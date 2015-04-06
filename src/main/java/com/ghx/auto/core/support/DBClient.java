@@ -4,6 +4,7 @@
 
 package com.ghx.auto.core.support;
 
+import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.dbcp.BasicDataSource;
@@ -34,10 +35,14 @@ public class DBClient {
     	return this;
     }
     
-    public Map get_rowData_as_Map(String sql) {
+    public Map<String, Object> get_rowData_as_Map(String sql) {
     	return jdbcTemplate.queryForMap(sql);
     }
-	
+    
+    public List<Map<String, Object>> get_rowData_as_List(String sql) {
+    	return jdbcTemplate.queryForList(sql);
+    }
+    
 	private void createJdbcTemplate() {
 		this.jdbcTemplate = new JdbcTemplate(getDataSource());
 	}

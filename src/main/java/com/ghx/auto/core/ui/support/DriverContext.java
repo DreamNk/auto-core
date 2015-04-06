@@ -109,9 +109,9 @@ public class DriverContext {
     	});
 		
 		WebDriver popup = null;
+		Set<String> windowHandles = primaryDriver.getWindowHandles();
 		
-		if (StringUtils.isBlank(this.popupWindow_1)) {
-			Set<String> windowHandles = primaryDriver.getWindowHandles();
+		if (StringUtils.isBlank(this.popupWindow_1) || !(windowHandles.contains(this.popupWindow_1))) {
 			for (String windowHandle : windowHandles) {
 				if (!windowHandle.equals(this.parentWindow)) {
 					this.popupWindow_1 = windowHandle;
@@ -140,9 +140,9 @@ public class DriverContext {
     	});
 		
 		WebDriver popup = null;
-		
-		if (StringUtils.isBlank(this.popupWindow_2)) {
-			Set<String> windowHandles = primaryDriver.getWindowHandles();
+		Set<String> windowHandles = primaryDriver.getWindowHandles();
+
+		if (StringUtils.isBlank(this.popupWindow_2) || !(windowHandles.contains(this.popupWindow_2))) {
 			for (String windowHandle : windowHandles) {
 				if ((!windowHandle.equals(this.parentWindow)) && (!windowHandle.equals(this.popupWindow_1))) {
 					this.popupWindow_2 = windowHandle;
