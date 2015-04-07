@@ -4,6 +4,11 @@
 
 package com.ghx.auto.core.ui.page;
 
+import java.awt.AWTException;
+import java.awt.Robot;
+import java.awt.Toolkit;
+import java.awt.datatransfer.StringSelection;
+import java.awt.event.KeyEvent;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -201,15 +206,27 @@ public abstract class AbstractPage<T extends AbstractPage<T>> {
         return me();
     }
     
-    public T browse_file(By locator, String filePath) {
-    	WebElement browsePath = findElement(locator); 
+    public T browse_file(String filePath) {
+        Robot robot = null;
+		
         try {
-        	browsePath.sendKeys(filePath);
-        }
-        catch (StaleElementReferenceException ex) {
-        	browsePath = findElement(locator);
-        	browsePath.sendKeys(filePath);
-        }
+			robot = new Robot();
+		} catch (AWTException e) {
+			Assert.fail("Unable to browse the file, path is: " + filePath);
+		}
+        
+        StringSelection ss = new StringSelection(filePath);  
+        Toolkit.getDefaultToolkit().getSystemClipboard().setContents(ss, null);
+        wait_until(5);
+        robot.keyPress(KeyEvent.VK_CONTROL);    
+        robot.keyPress(KeyEvent.VK_V);
+        robot.keyRelease(KeyEvent.VK_V);
+        robot.keyRelease(KeyEvent.VK_CONTROL); 
+        wait_until(2);
+        robot.keyPress(KeyEvent.VK_ENTER);  
+        robot.keyRelease(KeyEvent.VK_ENTER);
+        wait_until(5);
+
         return me();
     }
 
