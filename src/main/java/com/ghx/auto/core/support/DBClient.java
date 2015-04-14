@@ -9,6 +9,7 @@ import java.util.Map;
 
 import org.apache.commons.dbcp.BasicDataSource;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.testng.Assert;
 
@@ -30,17 +31,88 @@ public class DBClient {
     	createJdbcTemplate();
     }
     
-    public DBClient executeQuery(String sql) {
-    	jdbcTemplate.execute(sql);
+    public DBClient verify_row_count(String sql, int rowCountExpected) {
+    	List<Map<String, Object>> results = null;
+    	try {
+    		results = jdbcTemplate.queryForList(sql);
+    	}
+    	catch (DataAccessException dae) {
+    		Assert.fail("Unable to execute query, sql is: " + sql);
+    	}
+    	
+    	Assert.assertTrue(results.size() == rowCountExpected, "Row count differs from expected, " +  
+    						"Expected: " + rowCountExpected + " Actual: " + results.size() + ", sql is: " + sql);
     	return this;
     }
     
-    public Map<String, Object> get_rowData_as_Map(String sql) {
-    	return jdbcTemplate.queryForMap(sql);
+    public DBClient verify_row_count_greater_than_zero(String sql) {
+    	List<Map<String, Object>> results = null;
+    	try {
+    		results = jdbcTemplate.queryForList(sql);
+    	}
+    	catch (DataAccessException dae) {
+    		Assert.fail("Unable to execute query, sql is: " + sql);
+    	}
+    	
+    	Assert.assertTrue(results.size() > 0, "Row count is not greater than 0, sql is: " + sql);
+    	return this;
     }
     
-    public List<Map<String, Object>> get_rowData_as_List(String sql) {
-    	return jdbcTemplate.queryForList(sql);
+    public DBClient insert_rows(String sql) {
+    	int result = 0;
+    	try {
+    		result = jdbcTemplate.update(sql);
+    	}
+    	catch (DataAccessException dae) {
+    		Assert.fail("Unable to execute query, sql is: " + sql);
+    	}
+    	Assert.assertTrue(result > 0, "Unable to insert row(s), sql is: " + sql);
+
+    	return this;
+    }
+    
+    public DBClient update_rows(String sql) {
+    	try {
+    		jdbcTemplate.update(sql);
+    	}
+    	catch (DataAccessException dae) {
+    		Assert.fail("Unable to update row(s), sql is: " + sql);
+    	}
+    	
+    	return this;
+    }
+    
+    public DBClient delete_rows(String sql) {
+    	try {
+    		jdbcTemplate.update(sql);
+    	}
+    	catch (DataAccessException dae) {
+    		Assert.fail("Unable to delete row(s), sql is: " + sql);
+    	}
+    	
+    	return this;
+    }
+    
+    public Map<String, Object> get_single_row(String sql) {
+    	try {
+    		return jdbcTemplate.queryForMap(sql);
+    	}
+    	catch (DataAccessException dae) {
+    		Assert.fail("Unable to execute query, sql is: " + sql);
+    	}
+    	
+    	return null; //should not happen
+    }
+    
+    public List<Map<String, Object>> get_multiple_rows(String sql) {
+    	try {
+    		return jdbcTemplate.queryForList(sql);
+    	}
+    	catch (DataAccessException dae) {
+    		Assert.fail("Unable to execute query, sql is: " + sql);
+    	}
+    	
+    	return null; //should not happen
     }
     
 	private void createJdbcTemplate() {
