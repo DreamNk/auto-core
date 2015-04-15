@@ -13,6 +13,23 @@
 	<name>auto-core</name>
 	<description>Core framework for Automation</description>
 	
+    <repositories>
+        <repository>
+            <snapshots>
+        		<enabled>false</enabled>
+    	 	</snapshots>
+         	<id>GHX</id>
+         	<name>ghx-release</name>
+         	<url>http://artifactory.ghx.com:8081/artifactory/ghx-release</url>
+       </repository>
+        <repository>
+          	<snapshots />
+          	<id>GHX Snapshot</id>
+          	<name>ghx-snapshot</name>
+          	<url>http://artifactory.ghx.com:8081/artifactory/ghx-snapshot</url>
+        </repository>
+   	</repositories>
+	
 	<distributionManagement>
 		<repository>
 			<id>GHX</id>
