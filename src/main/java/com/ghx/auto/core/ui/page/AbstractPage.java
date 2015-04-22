@@ -104,6 +104,15 @@ public abstract class AbstractPage<T extends AbstractPage<T>> {
         return me();
     }
     
+    public T loadUrl(String url) {
+        String pageUrl = getUrl();
+        Assert.assertNotNull(StringUtils.defaultIfBlank(url+pageUrl, null),
+                "No url provided on " + getName()
+                        + ", Cannot perform load(),");
+        this.driver.get(url + pageUrl);
+        return me();
+    }
+    
     public T refresh_until(final By locator) {
 
     	verify(new ExpectedCondition<Boolean>() {
