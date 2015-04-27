@@ -321,6 +321,10 @@ public abstract class AbstractPage<T extends AbstractPage<T>> {
   		return findElement(locator).getAttribute("value");
   	}
   	
+  	public String find_element_attribute_value(By locator, String attributeName) {
+  		return findElement(locator).getAttribute(attributeName);
+  	}
+  	
   	public String find_element_text(By locator) {
   		return findElement(locator).getText();
   	}
