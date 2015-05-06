@@ -93,6 +93,17 @@ public class DBClient {
     	return this;
     }
     
+    public DBClient execute_query(String sql) {
+    	try {
+    		jdbcTemplate.execute(sql);
+    	}
+    	catch (DataAccessException dae) {
+    		Assert.fail("Unable to execute query, error message is: " + dae.getMessage() + " sql is: " + sql);
+    	}
+    	
+    	return this;
+    }
+    
     public Map<String, Object> get_single_row(String sql) {
     	try {
     		return jdbcTemplate.queryForMap(sql);
