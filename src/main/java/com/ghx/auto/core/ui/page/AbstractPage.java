@@ -13,6 +13,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
@@ -357,6 +358,16 @@ public abstract class AbstractPage<T extends AbstractPage<T>> {
  	
  	public Boolean is_element_displayed(By locator) {
 		  return driver.findElement(locator).isDisplayed();
+	}
+ 	
+	public Boolean is_element_exist(By locator) {
+		List<WebElement> elements = driver.findElements(locator);
+		if (elements.size() > 0) {
+			return Boolean.TRUE;
+		}
+		else {
+			return Boolean.FALSE;
+		}
 	}
  	
  	public T verify_element_disabled(By locator) {
