@@ -125,6 +125,12 @@ public class DriverContext {
         return  popup;
 	}
 	
+	public void closePopupWindow_1() {
+		if (StringUtils.isNotBlank(this.popupWindow_1)) {
+			getPopupWindow_1().close();
+		}
+	}
+	
 	public WebDriver getPopupWindow_2() {
 		new WebDriverWait(primaryDriver, envConfig.getTimeout(), 100).until(new ExpectedCondition<Boolean> () {
     		@Override

@@ -160,6 +160,14 @@ public abstract class AbstractAutoUITest {
     }
     
     /**
+     * close pop-up window 1 of the driver.
+     *
+     */
+    protected void close_popup_window() {
+    	driverContext.closePopupWindow_1();
+    }
+    
+    /**
      * focus on the pop-up window 2 of the driver.
      *
      */
