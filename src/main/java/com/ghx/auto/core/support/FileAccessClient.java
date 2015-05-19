@@ -175,6 +175,46 @@ public class FileAccessClient {
 		}
 		return this;
 	}
+	
+	public FileAccessClient delete_file_on_ftp(String fileName) {
+		Boolean loginSuccess = Boolean.FALSE;
+		Boolean changeDirSuccess = Boolean.FALSE;
+		Boolean deleteFileSuccess = Boolean.FALSE;
+
+
+		FTPClient client = new FTPClient();
+		try {
+			client.connect(getConfigParamValue("host"));
+			client.enterLocalPassiveMode();
+			
+			loginSuccess = client.login(getConfigParamValue("userName"), getConfigParamValue("password"));
+			if (!loginSuccess) {
+				Assert.fail("Login failed to the host: " + getConfigParamValue("host") + " with the user: " + getConfigParamValue("userName"));
+			}
+				
+			changeDirSuccess = client.changeWorkingDirectory(getConfigParamValue("destFilePath"));
+			if (!changeDirSuccess) {
+				Assert.fail("Unable to change the directory to: " + getConfigParamValue("destFilePath") + " on the host: " + getConfigParamValue("host"));
+			}
+				
+			deleteFileSuccess = client.deleteFile(fileName);
+			if (!deleteFileSuccess) {
+				Assert.fail("Unable to delete the file: " + getConfigParamValue("destFilePath") + FILE_PATH_APPENDER + 
+									fileName + " on the host: " + getConfigParamValue("host"));
+			}
+			
+		} catch (IOException ioe) {
+			Assert.fail("Failure connecting to the host: " + getConfigParamValue("host"));
+		} finally {
+			try {
+				if(client.isConnected()) 
+					client.disconnect();
+			} catch (IOException ioe) {
+					Assert.fail("Unable to disconnect the host: " + getConfigParamValue("host"));
+			}
+		}
+		return this;
+	}
 
 	public FileAccessClient store_file_to_local(File srcFile,String destFileName) {
 		File destFile = new File(getConfigParamValue("destFilePath") + FILE_PATH_APPENDER + destFileName);
