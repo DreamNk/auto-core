@@ -199,8 +199,8 @@ public class FileAccessClient {
 				
 			deleteFileSuccess = client.deleteFile(fileName);
 			if (!deleteFileSuccess) {
-				Assert.fail("Unable to delete the file: " + getConfigParamValue("destFilePath") + FILE_PATH_APPENDER + 
-									fileName + " on the host: " + getConfigParamValue("host"));
+				Assert.fail("File not found, path is: " + getConfigParamValue("destFilePath") + FILE_PATH_APPENDER + 
+									fileName + " , host: " + getConfigParamValue("host"));
 			}
 			
 		} catch (IOException ioe) {
