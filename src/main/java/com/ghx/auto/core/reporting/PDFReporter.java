@@ -29,7 +29,7 @@ public class PDFReporter {
 	 
 	    try {
 	        config = new EngineConfig();          
-	        //config.setBIRTHome("C:\\birt\\birt-runtime-2_2_1\\birt-runtime-2_2_1\\ReportEngine");
+	        //config.setEngineHome("/Users/utadiparthi/Downloads/birt-runtime-4_4_2/ReportEngine");
 	        config.setLogConfig("", Level.OFF);
 	        Platform.startup(config);
 	        final IReportEngineFactory FACTORY = (IReportEngineFactory) Platform
@@ -38,7 +38,7 @@ public class PDFReporter {
 	 
 	        // Open the report design
 	        IReportRunnable design = null;
-	        design = engine.openReportDesign(this.getClass().getResourceAsStream("/reportdesign/new_report.rptdesign")); 
+	        design = engine.openReportDesign(this.getClass().getResourceAsStream("/reportdesign/test.rptdesign")); 
 	        IRunAndRenderTask task = engine.createRunAndRenderTask(design);        
 	 
 	        PDFRenderOption PDF_OPTIONS = new PDFRenderOption();
