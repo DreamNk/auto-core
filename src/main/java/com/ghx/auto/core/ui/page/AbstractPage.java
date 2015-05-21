@@ -417,6 +417,12 @@ public abstract class AbstractPage<T extends AbstractPage<T>> {
         return me();
     }
     
+    public T verify_element_attribute_value(By locator, String attrName, String attrValue) {
+        WebElement element = findElement(locator);
+        Assert.assertEquals(element.getAttribute(attrName), attrValue);
+        return me();
+    }
+    
     public void refresh_page() {
     	driver.navigate().refresh();
     }
