@@ -1,14 +1,13 @@
-package com.ghx.auto.core.reporting;
+package com.ghx.auto.core.reporting.data;
 
-import java.util.Date;
 import java.util.List;
 
 public class SuiteResults {
 
 	private String suiteName;
-	private Date suiteStartTime;
-	private Date suiteEndTime;
-	private int suiteDuration;
+	private String suiteStartTime;
+	private String suiteEndTime;
+	private long suiteDuration;
 	private int totalTests;
 	private int totalPassed;
 	private int totalFailed;
@@ -22,22 +21,22 @@ public class SuiteResults {
 	public void setSuiteName(String suiteName) {
 		this.suiteName = suiteName;
 	}
-	public Date getSuiteStartTime() {
+	public String getSuiteStartTime() {
 		return suiteStartTime;
 	}
-	public void setSuiteStartTime(Date suiteStartTime) {
+	public void setSuiteStartTime(String suiteStartTime) {
 		this.suiteStartTime = suiteStartTime;
 	}
-	public Date getSuiteEndTime() {
+	public String getSuiteEndTime() {
 		return suiteEndTime;
 	}
-	public void setSuiteEndTime(Date suiteEndTime) {
+	public void setSuiteEndTime(String suiteEndTime) {
 		this.suiteEndTime = suiteEndTime;
 	}
-	public int getSuiteDuration() {
+	public long getSuiteDuration() {
 		return suiteDuration;
 	}
-	public void setSuiteDuration(int suiteDuration) {
+	public void setSuiteDuration(long suiteDuration) {
 		this.suiteDuration = suiteDuration;
 	}
 	public int getTotalTests() {
