@@ -245,10 +245,14 @@ public class FileAccessClient {
 	
 	public String read_local_file(String srcFilePath, String srcFileName) {
 		File srcFile = new File(srcFilePath + FILE_PATH_APPENDER + srcFileName);
+		return read_local_file(srcFile);
+	}
+	
+	public String read_local_file(File file) {
 		try {
-			return FileUtils.readFileToString(srcFile);
+			return FileUtils.readFileToString(file);
 		} catch (IOException e) {
-			Assert.fail("Failure reading file " + srcFileName + ", path: " + srcFilePath + ".");
+			Assert.fail("Failure reading file: " + file.getName() + ", path: " + file.getAbsolutePath() + ".");
 		}
 		return null; // this should not happen
 	}
