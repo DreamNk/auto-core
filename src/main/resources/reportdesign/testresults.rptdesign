@@ -1399,7 +1399,7 @@ if(length &lt;= width)
 	return longStr; 
 return (longStr.substring(0, width) + "\n" + wrap(longStr.substring(width, length), width)); 
 } 
-wrap( dataSetRow["TestName"], 13 );</expression>
+wrap( dataSetRow["TestName"], 10 );</expression>
                                         <property name="dataType">string</property>
                                         <property name="allowExport">true</property>
                                     </structure>
@@ -1412,7 +1412,7 @@ if(length &lt;= width)
 	return longStr; 
 return (longStr.substring(0, width) + "\n" + wrap(longStr.substring(width, length), width)); 
 } 
-wrap( dataSetRow["SectionName"], 13 );</expression>
+wrap( dataSetRow["SectionName"], 10 );</expression>
                                         <property name="dataType">string</property>
                                         <property name="allowExport">true</property>
                                     </structure>
@@ -1592,7 +1592,7 @@ wrap( dataSetRow["SectionName"], 13 );</expression>
                                             <property name="borderTopStyle">solid</property>
                                             <property name="borderTopWidth">1px</property>
                                             <label id="173">
-                                                <text-property name="text">Duration</text-property>
+                                                <text-property name="text">Duration  (Secs)</text-property>
                                             </label>
                                         </cell>
                                     </row>
@@ -1841,7 +1841,7 @@ wrap( dataSetRow["SectionName"], 13 );</expression>
                                             <property name="borderTopStyle">solid</property>
                                             <property name="borderTopWidth">1px</property>
                                             <label id="222">
-                                                <text-property name="text">Duration</text-property>
+                                                <text-property name="text">Duration (Secs)</text-property>
                                             </label>
                                         </cell>
                                     </row>
