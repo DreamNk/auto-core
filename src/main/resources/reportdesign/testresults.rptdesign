@@ -20,10 +20,10 @@
                 </ex-property>
                 <ex-property>
                     <name>pojoClassPath</name>
-                    <value>/Users/utadiparthi/Workspace/birt/suiteResults.jar;</value>
+                    <value>//ghxfs01/public/Tandoori/suiteResults.jar;</value>
                 </ex-property>
             </list-property>
-            <property name="pojoDataSetClassPath">/Users/utadiparthi/Workspace/birt/suiteResults.jar;</property>
+            <property name="pojoDataSetClassPath">//ghxfs01/public/Tandoori/suiteResults.jar;</property>
         </oda-data-source>
     </data-sources>
     <data-sets>
