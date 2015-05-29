@@ -1399,7 +1399,7 @@ if(length &lt;= width)
 	return longStr; 
 return (longStr.substring(0, width) + "\n" + wrap(longStr.substring(width, length), width)); 
 } 
-wrap( dataSetRow["TestName"], 10 );</expression>
+wrap( dataSetRow["TestName"], 11 );</expression>
                                         <property name="dataType">string</property>
                                         <property name="allowExport">true</property>
                                     </structure>
@@ -1412,7 +1412,7 @@ if(length &lt;= width)
 	return longStr; 
 return (longStr.substring(0, width) + "\n" + wrap(longStr.substring(width, length), width)); 
 } 
-wrap( dataSetRow["SectionName"], 10 );</expression>
+wrap( dataSetRow["SectionName"], 11 );</expression>
                                         <property name="dataType">string</property>
                                         <property name="allowExport">true</property>
                                     </structure>
