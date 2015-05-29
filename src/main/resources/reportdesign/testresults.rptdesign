@@ -1730,14 +1730,28 @@ wrap( dataSetRow["SectionName"], 11 );</expression>
                                     <structure>
                                         <property name="name">TestName</property>
                                         <text-property name="displayName">TestName</text-property>
-                                        <expression name="expression" type="javascript">dataSetRow["TestName"]</expression>
+                                        <expression name="expression" type="javascript">function wrap(longStr,width) { 
+length = longStr.length; 
+if(length &lt;= width) 
+	return longStr; 
+return (longStr.substring(0, width) + "\n" + wrap(longStr.substring(width, length), width)); 
+} 
+wrap( dataSetRow["TestName"], 23 );</expression>
                                         <property name="dataType">string</property>
+                                        <property name="allowExport">true</property>
                                     </structure>
                                     <structure>
                                         <property name="name">SectionName</property>
                                         <text-property name="displayName">SectionName</text-property>
-                                        <expression name="expression" type="javascript">dataSetRow["SectionName"]</expression>
+                                        <expression name="expression" type="javascript">function wrap(longStr,width) { 
+length = longStr.length; 
+if(length &lt;= width) 
+	return longStr; 
+return (longStr.substring(0, width) + "\n" + wrap(longStr.substring(width, length), width)); 
+} 
+wrap( dataSetRow["SectionName"], 23 );</expression>
                                         <property name="dataType">string</property>
+                                        <property name="allowExport">true</property>
                                     </structure>
                                     <structure>
                                         <property name="name">TestStartTime</property>
