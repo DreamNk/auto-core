@@ -64,7 +64,7 @@ public class FileAccessClient {
 
 		try {
 			JSch jsch = new JSch();
-			mySession = jsch.getSession(getConfigParamValue("userName"), getConfigParamValue("host"));
+			mySession = jsch.getSession(getConfigParamValue("userName"), getConfigParamValue("host"), Integer.parseInt(getConfigParamValue("port")));
 			mySession.setPassword(getConfigParamValue("password"));
 			java.util.Properties config = new java.util.Properties();
 			config.put("StrictHostKeyChecking", "no");
@@ -88,13 +88,13 @@ public class FileAccessClient {
 		}
 		return this;
 	}
-	
+    
 	public FileAccessClient upload_file_via_ftp(File srcFile,String destFileName) {
 		String content = "";
 		try {
 			content = FileUtils.readFileToString(srcFile);
 		} catch (IOException e) {
-			Assert.fail("Failure reading file " + srcFile.getName() + " from path: " + srcFile.getPath() + ".");
+			Assert.fail("Failure reading file from path: " + srcFile.getPath());
 		}
 		return upload_file_via_ftp(content,destFileName);
 	}
