@@ -22,10 +22,10 @@ public class AutoUISuiteListener implements ISuiteListener {
         String envFileName = "env-config.ini";
         String mybatisConfig = "mybatis-config.xml";
 
-    /*    if (suite.getXmlSuite().getFileName().endsWith("local.xml")) {
+        if (suite.getXmlSuite().getFileName().endsWith("local.xml")) {
             envFileName = "env-config-local.ini";
             mybatisConfig = "mybatis-config-local.xml";
-        }*/
+        }
         
         String targetEnv = System.getProperty("TargetEnv");
         if (StringUtils.isBlank(targetEnv)) {

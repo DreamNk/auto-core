@@ -39,7 +39,7 @@ public abstract class AbstractAutoUITest {
     protected SqlSessionFactory sessionFactory;
 
     @BeforeClass(alwaysRun=true)
-    public void beforeTest(ITestContext context) {
+    public void init(ITestContext context) {
     	this.context = context;
     	
         Object driverContext = context.getAttribute(DriverContext.class.getName());
