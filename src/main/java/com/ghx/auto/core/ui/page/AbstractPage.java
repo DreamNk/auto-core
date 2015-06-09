@@ -356,6 +356,11 @@ public abstract class AbstractPage<T extends AbstractPage<T>> {
  		  return element.isSelected();
 	}
  	
+	public Boolean is_element_enabled(By locator) {
+		  WebElement element = findElement(locator);
+		  return element.isEnabled();
+	}
+ 	
  	public Boolean is_element_displayed(By locator) {
 		  return driver.findElement(locator).isDisplayed();
 	}
