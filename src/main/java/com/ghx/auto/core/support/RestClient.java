@@ -26,6 +26,7 @@ import com.jayway.restassured.http.ContentType;
 import com.jayway.restassured.response.ValidatableResponse;
 import com.jayway.restassured.specification.RequestSpecification;
 import com.jayway.restassured.specification.ResponseSpecification;
+import static com.jayway.restassured.matcher.RestAssuredMatchers.matchesXsd;
 
 public class RestClient {
 	
@@ -215,6 +216,21 @@ public class RestClient {
     
     public RestClient verify_content(String value ) {
     	resSpec.body(containsString(value));
+    	return this;
+    }
+    
+    public RestClient verify_content_with_xsd(File xsd) {
+    	resSpec.body(matchesXsd(xsd));
+    	return this;
+    }
+    
+    public RestClient verify_content_with_dtd(File dtd) {
+    	resSpec.body(matchesXsd(dtd));
+    	return this;
+    }
+    
+    public RestClient verify_content_with_xPath(String xpath) {
+    	resSpec.body(hasXPath(xpath));
     	return this;
     }
     
