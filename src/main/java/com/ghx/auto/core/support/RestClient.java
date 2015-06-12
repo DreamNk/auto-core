@@ -4,6 +4,7 @@
 
 package com.ghx.auto.core.support;
 
+import static com.jayway.restassured.matcher.RestAssuredMatchers.matchesXsd;
 import static org.hamcrest.core.StringContains.containsString;
 import static org.hamcrest.xml.HasXPath.hasXPath;
 
@@ -26,7 +27,6 @@ import com.jayway.restassured.http.ContentType;
 import com.jayway.restassured.response.ValidatableResponse;
 import com.jayway.restassured.specification.RequestSpecification;
 import com.jayway.restassured.specification.ResponseSpecification;
-import static com.jayway.restassured.matcher.RestAssuredMatchers.matchesXsd;
 
 public class RestClient {
 	
@@ -219,13 +219,13 @@ public class RestClient {
     	return this;
     }
     
-    public RestClient verify_content_with_xsd(File xsd) {
-    	resSpec.body(matchesXsd(xsd));
+    public RestClient verify_content_with_xsd(String path) {
+    	resSpec.body(matchesXsd(getFile(path)));
     	return this;
     }
     
-    public RestClient verify_content_with_dtd(File dtd) {
-    	resSpec.body(matchesXsd(dtd));
+    public RestClient verify_content_with_dtd(String path) {
+    	resSpec.body(matchesXsd(getFile(path)));
     	return this;
     }
     
