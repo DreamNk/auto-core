@@ -347,14 +347,7 @@ public class RestClient {
     }
     
     private String getConfigParamValue(String section, String param) {
-    	Map<String, String> configSection = this.envConfig.get(section.toUpperCase());
-    	Assert.assertNotNull(configSection, "No configuration section provided in configuration file with the name: " + section.toUpperCase());
-    	String paramValue =  configSection.get(param);
-    	Assert.assertNotNull(StringUtils.defaultIfBlank(paramValue, null),
-                "No configuration provided for the param: " + param
-                        + ",under section: " + section.toUpperCase());
-    	return paramValue;
-    	
+    	return this.envConfig.getConfigParamValue(section, param);
     }
     
     private File getFile(String path) {

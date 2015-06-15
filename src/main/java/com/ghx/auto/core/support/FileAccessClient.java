@@ -14,7 +14,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.Writer;
-import java.util.Map;
 
 import org.apache.commons.compress.archivers.ArchiveException;
 import org.apache.commons.compress.archivers.ArchiveOutputStream;
@@ -336,13 +335,11 @@ public class FileAccessClient {
 	}
 	
     private String getConfigParamValue(String param) {
-    	Map<String, String> section = this.envConfig.get(this.section.toUpperCase());
-    	Assert.assertNotNull(section, "No configuration section provided in configuration file with the name: " + this.section.toUpperCase());
-    	String paramValue =  section.get(param);
-    	Assert.assertNotNull(StringUtils.defaultIfBlank(paramValue, null),
-                "No configuration provided for the param: " + param
-                        + ",under section: " + this.section.toUpperCase());
-    	return paramValue;
+    	return getConfigParamValue(this.section,param);
+    }
+    
+    private String getConfigParamValue(String section, String param) {
+    	return this.envConfig.getConfigParamValue(section, param);
     }
 
 }

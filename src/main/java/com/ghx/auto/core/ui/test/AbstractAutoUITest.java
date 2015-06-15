@@ -203,6 +203,16 @@ public abstract class AbstractAutoUITest {
     }
     
     /**
+     * Get configuration param value from env-config.ini.
+     *
+     * @param section Configuration Section to be referred.
+     * @param param Configuration parameter under a section to be referred.
+     */
+    protected String getConfigParamValue(String section, String param) {
+    	return envConfig.getConfigParamValue(section, param);
+    }
+    
+    /**
      * Store the new attribute in test context.
      *
      * @param name String Attribute name.
