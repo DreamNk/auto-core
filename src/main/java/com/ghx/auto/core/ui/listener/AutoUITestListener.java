@@ -29,11 +29,6 @@ import com.ghx.auto.core.ui.support.EnvConfig;
 
 public class AutoUITestListener extends TestListenerAdapter {
 
-	DriverContext driverContext;
-	TakesScreenshot screenShot;
-	EnvConfig envConfig;
-	File file;
-	String method;
 	SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_HHmmss_SSS");
 	
     @Override
@@ -44,11 +39,10 @@ public class AutoUITestListener extends TestListenerAdapter {
         Assert.assertNotNull(StringUtils.defaultIfBlank(env, null), "Test parameter 'env' must not be blank,");
 
         // load appropriate ini preferences from suite attribute
-        envConfig = (EnvConfig) context.getSuite().getAttribute(EnvConfig.class.getName());
+        EnvConfig envConfig = (EnvConfig) context.getSuite().getAttribute(EnvConfig.class.getName());
         
-        driverContext = new DriverContext(envConfig,env);
         // save driverContext in testContext
-        context.setAttribute(DriverContext.class.getName(), driverContext);
+        context.setAttribute(DriverContext.class.getName(), new DriverContext(envConfig,env));
 
         //save mybatis SessionFactory in testContext
         if (envConfig.getTestDataSource().equalsIgnoreCase("db")) {
@@ -59,28 +53,27 @@ public class AutoUITestListener extends TestListenerAdapter {
     
     @Override
     public void onTestStart(ITestResult result) {
-    	method = result.getName();
-    	System.out.println("Test started: " + method);
+    	System.out.println("Test started: " + result.getName());
     }
     
     @Override
     public void onTestSuccess(ITestResult result) {
-    	method = result.getName();
-    	System.out.println("Test passed: " + method);
+    	System.out.println("Test passed: " + result.getName());
     }
     
     @Override
     public void onTestFailure(ITestResult result) {
-    	method = result.getName();
-    	System.out.println("Test failed: " + method);
-    	String screenShotsLocation = getConfigParamValue("REPORTING", "screenShotsLocation");
+    	System.out.println("Test failed: " + result.getName());
+        EnvConfig envConfig = (EnvConfig) result.getTestContext().getSuite().getAttribute(EnvConfig.class.getName());
+    	String screenShotsLocation = getConfigParamValue(envConfig, "REPORTING", "screenShotsLocation");
     	if (StringUtils.isNotBlank(screenShotsLocation)) {
-    		screenShot = ((TakesScreenshot) driverContext.getPrimaryDriver());
-    		file = screenShot.getScreenshotAs(OutputType.FILE);
+            DriverContext driverContext = (DriverContext) result.getTestContext().getAttribute(DriverContext.class.getName());
+    		TakesScreenshot screenShot = ((TakesScreenshot) driverContext.getPrimaryDriver());
+    		File file = screenShot.getScreenshotAs(OutputType.FILE);
     		try {
-    			FileUtils.copyFile(file, new File(screenShotsLocation + "/" + method + "_" + sdf.format(new Date(result.getEndMillis())) + ".png"));
+    			FileUtils.copyFile(file, new File(screenShotsLocation + "/" + result.getName() + "_" + sdf.format(new Date(result.getEndMillis())) + ".png"));
     		} catch (IOException e) {
-    			System.out.println("Unable to take screenshot for test: " + method);
+    			System.out.println("Unable to take screenshot for test: " + result.getName());
     		}
     	}	
     		
@@ -118,8 +111,8 @@ public class AutoUITestListener extends TestListenerAdapter {
         return sessionFactory;
     }
     
-    private String getConfigParamValue(String section, String param) {
-    	Map<String, String> configSection = this.envConfig.get(section.toUpperCase());
+    private String getConfigParamValue(EnvConfig envConfig, String section, String param) {
+    	Map<String, String> configSection = envConfig.get(section.toUpperCase());
     	if (!CollectionUtils.isEmpty(configSection)) {
         	return configSection.get(param);
     	}

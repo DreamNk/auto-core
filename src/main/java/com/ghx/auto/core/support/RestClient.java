@@ -38,6 +38,7 @@ public class RestClient {
     
     public RestClient(EnvConfig envConfig, String section) {
     	RestAssured.reset();
+    	RestAssured.useRelaxedHTTPSValidation();
     	this.envConfig = envConfig;
     	this.section = section;
     	this.reqSpec = build_request_spec();
