@@ -21,6 +21,7 @@ import com.ghx.auto.core.db.mapper.Mapper;
 import com.ghx.auto.core.support.DBClient;
 import com.ghx.auto.core.support.FileAccessClient;
 import com.ghx.auto.core.support.RestClient;
+import com.ghx.auto.core.support.excel.ExcelClient;
 import com.ghx.auto.core.ui.page.AbstractPage;
 import com.ghx.auto.core.ui.support.Alert;
 import com.ghx.auto.core.ui.support.DriverContext;
@@ -200,6 +201,15 @@ public abstract class AbstractAutoUITest {
      */
     protected DBClient getDBClient(String section) {
     	return new DBClient(envConfig, section);
+    }
+    
+    /**
+     * Get Excel Client Utility.
+     *
+     * @param section Environment Configuration Section to be referred.
+     */
+    protected ExcelClient getExcelClient(String section) {
+    	return new ExcelClient(envConfig, section);
     }
     
     /**
