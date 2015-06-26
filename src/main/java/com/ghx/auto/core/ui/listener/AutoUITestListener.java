@@ -66,8 +66,9 @@ public class AutoUITestListener extends TestListenerAdapter {
     	System.out.println("Test failed: " + result.getName());
         EnvConfig envConfig = (EnvConfig) result.getTestContext().getSuite().getAttribute(EnvConfig.class.getName());
     	String screenShotsLocation = getConfigParamValue(envConfig, "REPORTING", "screenShotsLocation");
-    	if (StringUtils.isNotBlank(screenShotsLocation)) {
-            DriverContext driverContext = (DriverContext) result.getTestContext().getAttribute(DriverContext.class.getName());
+        DriverContext driverContext = (DriverContext) result.getTestContext().getAttribute(DriverContext.class.getName());
+    	
+        if (StringUtils.isNotBlank(screenShotsLocation) && driverContext.isPrimaryDriverExists()) {
     		TakesScreenshot screenShot = ((TakesScreenshot) driverContext.getPrimaryDriver());
     		File file = screenShot.getScreenshotAs(OutputType.FILE);
     		try {

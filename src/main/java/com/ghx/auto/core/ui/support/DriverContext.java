@@ -54,42 +54,6 @@ public class DriverContext {
         return secondaryDriver;
 	}
 	
-	private WebDriver createDriver() {
-		Map<String, String> capabilities = new HashMap<String, String>(this.envConfig.get(env));
-        DesiredCapabilities desiredCapabilities = new DesiredCapabilities(capabilities);
-		String browser = capabilities.get("browser").toLowerCase();
-
-        if (this.envConfig.getInstance().equals("remote")) {
-        	try {
-        		desiredCapabilities.setBrowserName(browser);
-        		desiredCapabilities.setCapability(CapabilityType.ACCEPT_SSL_CERTS, true);
-				return new RemoteWebDriver(new URL(envConfig.getCloudUrl()), desiredCapabilities);
-			} 
-        	catch (MalformedURLException ex) {
-                Assert.fail("Unable to create remote driver for: " + envConfig.getCloudUrl(), ex);
-			}
-        }
-        else {
-        	switch(browser) {
-            case "internet explorer":
-                //desiredCapabilities.setCapability(InternetExplorerDriver.NATIVE_EVENTS, false);
-                desiredCapabilities.setCapability(InternetExplorerDriver.IE_ENSURE_CLEAN_SESSION, true);
-            	return new InternetExplorerDriver(desiredCapabilities);
-            case "firefox":
-            	return new FirefoxDriver(desiredCapabilities);
-            case "chrome":
-            	return new ChromeDriver(desiredCapabilities);
-            default:
-                // throw exception
-            }
-        }
-        
-        Assert.fail("Unable to create driver instance:, ");
-        
-        //this will not happen
-        return null;
-	}
-	
 	public WebDriver getParentWindow() {
 		return primaryDriver.switchTo().window(this.parentWindow);
 	}
@@ -169,6 +133,46 @@ public class DriverContext {
         if (primaryDriver != null) {
         	primaryDriver.quit();
         }
+	}
+  	
+	public boolean isPrimaryDriverExists() {
+		return primaryDriver != null;
+	}
+  	
+  	private WebDriver createDriver() {
+		Map<String, String> capabilities = new HashMap<String, String>(this.envConfig.get(env));
+        DesiredCapabilities desiredCapabilities = new DesiredCapabilities(capabilities);
+		String browser = capabilities.get("browser").toLowerCase();
+
+        if (this.envConfig.getInstance().equals("remote")) {
+        	try {
+        		desiredCapabilities.setBrowserName(browser);
+        		desiredCapabilities.setCapability(CapabilityType.ACCEPT_SSL_CERTS, true);
+				return new RemoteWebDriver(new URL(envConfig.getCloudUrl()), desiredCapabilities);
+			} 
+        	catch (MalformedURLException ex) {
+                Assert.fail("Unable to create remote driver for: " + envConfig.getCloudUrl(), ex);
+			}
+        }
+        else {
+        	switch(browser) {
+            case "internet explorer":
+                //desiredCapabilities.setCapability(InternetExplorerDriver.NATIVE_EVENTS, false);
+                desiredCapabilities.setCapability(InternetExplorerDriver.IE_ENSURE_CLEAN_SESSION, true);
+            	return new InternetExplorerDriver(desiredCapabilities);
+            case "firefox":
+            	return new FirefoxDriver(desiredCapabilities);
+            case "chrome":
+            	return new ChromeDriver(desiredCapabilities);
+            default:
+                // throw exception
+            }
+        }
+        
+        Assert.fail("Unable to create driver instance:, ");
+        
+        //this will not happen
+        return null;
 	}
   	
     private WebDriver maximize(WebDriver driver) {
