@@ -53,17 +53,17 @@ public class AutoUITestListener extends TestListenerAdapter {
     
     @Override
     public void onTestStart(ITestResult result) {
-    	System.out.println("Test started: " + result.getName());
+    	System.out.println("running... " + result.getTestClass().getRealClass().getSimpleName() + " --> " + result.getName());
     }
     
     @Override
     public void onTestSuccess(ITestResult result) {
-    	System.out.println("Test passed: " + result.getName());
+    	System.out.println("passed... " + result.getTestClass().getRealClass().getSimpleName() + " --> " + result.getName());
     }
     
     @Override
     public void onTestFailure(ITestResult result) {
-    	System.out.println("Test failed: " + result.getName());
+    	System.out.println("failed... " + result.getTestClass().getRealClass().getSimpleName() + " --> " + result.getName());
         EnvConfig envConfig = (EnvConfig) result.getTestContext().getSuite().getAttribute(EnvConfig.class.getName());
     	String screenShotsLocation = getConfigParamValue(envConfig, "REPORTING", "screenShotsLocation");
         DriverContext driverContext = (DriverContext) result.getTestContext().getAttribute(DriverContext.class.getName());
@@ -82,7 +82,7 @@ public class AutoUITestListener extends TestListenerAdapter {
     
     @Override
     public void onTestSkipped(ITestResult result) {
-    	System.out.println("Test skipped: " + result.getName());
+    	System.out.println("skipped... " + result.getTestClass().getRealClass().getSimpleName() + " --> " + result.getName());
     }
 
     @Override
