@@ -57,7 +57,7 @@ public class ExcelClient {
     	return sheet.get(row);
     }
     
-    public Object[][] getMultipleRows(int rowBegin, int rowEnd) {
+    public Object[][] get_multiple_rows(int rowBegin, int rowEnd) {
       	Object[][] array = new Object[(rowEnd-rowBegin)+1][2];
     	int count = 0;
     	for(Map.Entry<Integer,ExcelRow> entry : sheet.entrySet()){
