@@ -70,6 +70,16 @@ public class ExcelClient {
     	return array;
     }
     
+    public Map<Integer, ExcelRow> get_multiple_rows_as_map(int rowBegin, int rowEnd) {
+    	Map<Integer, ExcelRow> map = new HashMap<Integer, ExcelRow>();
+    	for(Map.Entry<Integer,ExcelRow> entry : sheet.entrySet()){
+    		if ((entry.getKey() >= rowBegin) && (entry.getKey() <= rowEnd)) {
+    			map.put(entry.getKey(), entry.getValue());
+    		}
+    	}
+    	return map;
+    }
+    
     private void loadSheet() {
     	Map<Integer, ExcelRow> sheetData = new HashMap<Integer, ExcelRow>();
     	try {
