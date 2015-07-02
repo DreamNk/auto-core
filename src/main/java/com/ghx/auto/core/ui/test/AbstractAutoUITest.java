@@ -68,11 +68,11 @@ public abstract class AbstractAutoUITest {
 
             // little bit of reflection, let's keep it minimal.
             // inject driver
-            Field driver = pageClass.getSuperclass().getSuperclass().getDeclaredField("driver");
+            Field driver = AbstractPage.class.getDeclaredField("driver");
             driver.setAccessible(true);
             driver.set(page, pageDriver);
             // inject env config
-            Field envConfig = pageClass.getSuperclass().getSuperclass().getDeclaredField("envConfig");
+            Field envConfig = AbstractPage.class.getDeclaredField("envConfig");
             envConfig.setAccessible(true);
             envConfig.set(page, this.envConfig);
 
