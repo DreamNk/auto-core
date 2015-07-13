@@ -42,11 +42,16 @@ public class ExcelClient {
     	return array;
     }
     
+    public Object[][] get_all_rows_except_header() {
+        return get_multiple_rows(2, sheet.size());  //assuming the header on row 1
+    }
+    
     public Map<Integer, ExcelRow> get_all_rows_as_map() {
     	return sheet;
     }
     
     public Object[][] get_single_row(int row) {
+    	validate_row_no(row);
     	Object[][] array = new Object[1][2];
     	array[0][0] = row;
     	array[0][1] = sheet.get(row);
@@ -54,6 +59,7 @@ public class ExcelClient {
     }
     
     public ExcelRow get_single_row_as_obj(int row) {
+    	validate_row_no(row);
     	return sheet.get(row);
     }
     
@@ -80,6 +86,16 @@ public class ExcelClient {
     	return map;
     }
     
+    public int get_total_no_of_rows() {
+    	return sheet.size();
+    }
+    
+    private void validate_row_no(int row) {
+    	if (!sheet.containsKey(row)) {
+    		Assert.fail("row does not exist in the excel sheet, row no. is: " + row);
+    	}
+    }
+    
     private void loadSheet() {
     	Map<Integer, ExcelRow> sheetData = new HashMap<Integer, ExcelRow>();
     	try {
@@ -94,7 +110,7 @@ public class ExcelClient {
             	Row row = rowIterator.next();
             	Iterator<Cell> cellIterator = row.cellIterator();
             	
-            	Object[] rowData = new Object[row.getLastCellNum()-row.getFirstCellNum()];
+            	Object[] rowData = new Object[row.getLastCellNum()];
                 while (cellIterator.hasNext()) {
                 	Cell cell = cellIterator.next();
                     switch (cell.getCellType()) {
@@ -105,7 +121,7 @@ public class ExcelClient {
                         	rowData[cell.getColumnIndex()] = cell.getStringCellValue();
                             break;
                         case Cell.CELL_TYPE_BLANK:
-                        	rowData[cell.getColumnIndex()] = "BLANK";
+                        	//rowData[cell.getColumnIndex()] = "BLANK";
                             break;    
                         case Cell.CELL_TYPE_BOOLEAN:
                         	rowData[cell.getColumnIndex()] = cell.getBooleanCellValue();
