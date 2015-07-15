@@ -36,8 +36,7 @@ public class ExcelRow {
     }
     
     public boolean does_column_contain_value(int position) {
-    	validate_column_position(position);
-        if(rowData[--position] == null)
+    	if (position > rowData.length || rowData[--position] == null) 
            return Boolean.FALSE;
         return Boolean.TRUE;
      }
