@@ -255,6 +255,11 @@ public class RestClient {
     	return this;
     }
     
+    public RestClient add_headers(String name, String value, Object... nameValuePairs) {
+    	reqSpec.headers(name, value, nameValuePairs);
+    	return this;
+    }
+    
     public RestClient add_url_param(String name, String value) {
     	reqSpec.queryParam(name, value);
     	return this;
