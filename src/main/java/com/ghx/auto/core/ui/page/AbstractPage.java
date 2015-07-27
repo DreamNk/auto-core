@@ -21,7 +21,9 @@ import java.util.concurrent.Callable;
 
 import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.By;
+import org.openqa.selenium.ElementNotVisibleException;
 import org.openqa.selenium.Keys;
+import org.openqa.selenium.NotFoundException;
 import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
@@ -606,7 +608,9 @@ public abstract class AbstractPage<T extends AbstractPage<T>> {
 
     @SuppressWarnings("hiding")
     protected <T> T verify(ExpectedCondition<T> condition, long timeout, long sleep) {
-        return new WebDriverWait(this.driver, timeout, sleep).until(condition);
+    	WebDriverWait wait = new WebDriverWait(this.driver, timeout, sleep);
+    	wait.ignoring(NotFoundException.class, ElementNotVisibleException.class);
+        return wait.until(condition);
     }
     
 }
