@@ -608,9 +608,9 @@ public abstract class AbstractPage<T extends AbstractPage<T>> {
 
     @SuppressWarnings("hiding")
     protected <T> T verify(ExpectedCondition<T> condition, long timeout, long sleep) {
-    	WebDriverWait wait = new WebDriverWait(this.driver, timeout, sleep);
-    	wait.ignoring(NotFoundException.class, ElementNotVisibleException.class);
-        return wait.until(condition);
+    	return new WebDriverWait(this.driver, timeout, sleep)
+    				.ignoring(NotFoundException.class, ElementNotVisibleException.class)
+    				.until(condition);
     }
     
 }
