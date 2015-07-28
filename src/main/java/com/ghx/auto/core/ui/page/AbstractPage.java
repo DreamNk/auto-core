@@ -206,13 +206,13 @@ public abstract class AbstractPage<T extends AbstractPage<T>> {
     }
 
     public T enter(By locator, String text) {
-    	WebElement textField = findElement(locator); 
+    	WebElement textField = findElementAndVisible(locator); 
         textField.clear();
         try {
             textField.sendKeys(text);
         }
         catch (StaleElementReferenceException ex) {
-            textField = findElement(locator);
+            textField = findElementAndVisible(locator);
             textField.sendKeys(text);
         }
         return me();
@@ -269,7 +269,7 @@ public abstract class AbstractPage<T extends AbstractPage<T>> {
     }
          
     public T submit(By locator) {
-        WebElement submittable = findElement(locator);
+        WebElement submittable = findElementAndVisible(locator);
         submittable.submit();
         return me();
     }
@@ -460,12 +460,12 @@ public abstract class AbstractPage<T extends AbstractPage<T>> {
     
     protected T mouseover(By locator) {
     	Actions mouseover = new Actions(driver);
-    	mouseover.moveToElement(findElement(locator)).build().perform();
+    	mouseover.moveToElement(findElementAndVisible(locator)).build().perform();
     	return me();
     }
     
     protected T drag_n_drop(By source, By target) {
-    	new Actions(driver).dragAndDrop(findElement(source), findElement(target)).perform();
+    	new Actions(driver).dragAndDrop(findElementAndVisible(source), findElementAndVisible(target)).perform();
     	return me();
     }
 
@@ -588,6 +588,10 @@ public abstract class AbstractPage<T extends AbstractPage<T>> {
   
     private WebElement findElement(By locator) {
         return verify(ExpectedConditions.presenceOfElementLocated(locator));
+    }
+    
+    private WebElement findElementAndVisible(By locator) {
+        return verify(ExpectedConditions.visibilityOfElementLocated(locator));
     }
 
     private WebElement findElement(ExpectedCondition<WebElement> condition) {
