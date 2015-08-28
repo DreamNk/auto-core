@@ -258,6 +258,16 @@ public abstract class AbstractPage<T extends AbstractPage<T>> {
     	return me();
     }
     
+    public T click_link_repeat(By locator) {
+    	try {
+    		click(locator);
+    	} catch (ElementNotVisibleException enve) {
+    		System.out.println("inside error...");
+    		click_link_repeat(locator);
+    	}
+    	return me();
+    }
+    
     public T click_tab(By locator) {
     	click(locator);
         return me();
