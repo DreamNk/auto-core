@@ -223,6 +223,14 @@ public abstract class AbstractAutoUITest {
     }
     
     /**
+     * Get the current environment the tests are running in.
+     *
+     */
+    protected String getTargetEnv() {
+    	return envConfig.getTargetEnv();
+    }
+    
+    /**
      * Store the new attribute in test context.
      *
      * @param name String Attribute name.
