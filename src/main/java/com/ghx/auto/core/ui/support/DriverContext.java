@@ -26,11 +26,14 @@ public class DriverContext {
 	
 	private EnvConfig envConfig;
 	private String env;
+	private WebDriver primaryDriver;
+	private WebDriver secondaryDriver;
 	private String parentWindow;
 	private String popupWindow_1;
 	private String popupWindow_2;
-	private WebDriver primaryDriver;
-	private WebDriver secondaryDriver;
+	private String secondaryParentWindow;
+	private String secondaryPopupWindow_1;
+	private String secondaryPopupWindow_2;
 	
 	public DriverContext(EnvConfig config, String env) {
 		this.envConfig = config;
@@ -38,7 +41,7 @@ public class DriverContext {
 	}
 
 	public WebDriver getPrimaryDriver() {
-        if (primaryDriver == null) {
+        if (this.primaryDriver == null) {
         	this.primaryDriver = createDriver();
         	this.parentWindow = primaryDriver.getWindowHandle();
         	maximize(this.primaryDriver);
@@ -47,8 +50,9 @@ public class DriverContext {
 	}
 	
 	public WebDriver getSecondaryDriver() {
-        if (secondaryDriver == null) {
-        	secondaryDriver = createDriver();
+        if (this.secondaryDriver == null) {
+        	this.secondaryDriver = createDriver();
+        	this.secondaryParentWindow = secondaryDriver.getWindowHandle();
         	maximize(this.secondaryDriver);
         }
         return secondaryDriver;
@@ -56,6 +60,10 @@ public class DriverContext {
 	
 	public WebDriver getParentWindow() {
 		return primaryDriver.switchTo().window(this.parentWindow);
+	}
+	
+	public WebDriver getSecondaryDriverParentWindow() {
+		return secondaryDriver.switchTo().window(this.secondaryParentWindow);
 	}
 	
 	public WebDriver getPopupWindow_1() {
@@ -92,6 +100,45 @@ public class DriverContext {
 	public void closePopupWindow_1() {
 		if (StringUtils.isNotBlank(this.popupWindow_1)) {
 			getPopupWindow_1().close();
+			this.popupWindow_1 = null;
+		}
+	}
+	
+	public WebDriver getSecondaryDriverPopupWindow_1() {
+		new WebDriverWait(secondaryDriver, envConfig.getTimeout(), 100).until(new ExpectedCondition<Boolean> () {
+    		@Override
+    		public Boolean apply(WebDriver driver) {
+    			Set<String> windowHandles = driver.getWindowHandles();
+    			return (windowHandles.size() > 1 && !windowHandles.contains(""));
+    		}
+    		
+    		@Override
+	    	public String toString() {
+	    		return String.format("focusing on the pop-up window");
+	    	} 
+    	});
+		
+		WebDriver popup = null;
+		Set<String> windowHandles = secondaryDriver.getWindowHandles();
+		
+		if (StringUtils.isBlank(this.secondaryPopupWindow_1) || !(windowHandles.contains(this.secondaryPopupWindow_1))) {
+			for (String windowHandle : windowHandles) {
+				if (!windowHandle.equals(this.secondaryParentWindow)) {
+					this.secondaryPopupWindow_1 = windowHandle;
+				}
+		    }
+		}
+		
+		popup = secondaryDriver.switchTo().window(this.secondaryPopupWindow_1);
+        Assert.assertNotNull(popup, "Unable to focus on pop-up window:, ");
+        
+        return  popup;
+	}
+	
+	public void closeSecondaryDriverPopupWindow_1() {
+		if (StringUtils.isNotBlank(this.secondaryPopupWindow_1)) {
+			getSecondaryDriverPopupWindow_1().close();
+			this.secondaryPopupWindow_1 = null;
 		}
 	}
 	
@@ -126,17 +173,82 @@ public class DriverContext {
         return  popup;
 	}
 	
+	public void closePopupWindow_2() {
+		if (StringUtils.isNotBlank(this.popupWindow_2)) {
+			getPopupWindow_2().close();
+			this.popupWindow_2 = null;
+		}
+	}
+	
+	public WebDriver getSecondaryDriverPopupWindow_2() {
+		new WebDriverWait(secondaryDriver, envConfig.getTimeout(), 100).until(new ExpectedCondition<Boolean> () {
+    		@Override
+    		public Boolean apply(WebDriver driver) {
+    			Set<String> windowHandles = driver.getWindowHandles();
+    			return (windowHandles.size() > 2 && !windowHandles.contains(""));
+    		}
+    		
+    		@Override
+	    	public String toString() {
+	    		return String.format("focusing on the pop-up window");
+	    	} 
+    	});
+		
+		WebDriver popup = null;
+		Set<String> windowHandles = secondaryDriver.getWindowHandles();
+
+		if (StringUtils.isBlank(this.secondaryPopupWindow_2) || !(windowHandles.contains(this.secondaryPopupWindow_2))) {
+			for (String windowHandle : windowHandles) {
+				if ((!windowHandle.equals(this.secondaryParentWindow)) && (!windowHandle.equals(this.secondaryPopupWindow_1))) {
+					this.secondaryPopupWindow_2 = windowHandle;
+				}
+		    }
+		}
+		
+		popup = secondaryDriver.switchTo().window(this.secondaryPopupWindow_2);
+        Assert.assertNotNull(popup, "Unable to focus on pop-up window:, ");
+        
+        return  popup;
+	}
+	
+	public void closeSecondaryDriverPopupWindow_2() {
+		if (StringUtils.isNotBlank(this.secondaryPopupWindow_2)) {
+			getSecondaryDriverPopupWindow_2().close();
+			this.secondaryPopupWindow_2 = null;
+		}
+	}
+	
   	public void quitDrivers() {
-        if (secondaryDriver != null) {
-        	secondaryDriver.quit();
-        }
+        quitPrimaryDriver();
+        quitSecondaryDriver();
+	}
+  	
+  	public void quitPrimaryDriver() {
         if (primaryDriver != null) {
         	primaryDriver.quit();
+        	this.primaryDriver = null;
+        	this.parentWindow = null;
+        	this.popupWindow_1 = null;
+        	this.popupWindow_2 = null;
+        }
+	}
+  	
+  	public void quitSecondaryDriver() {
+        if (secondaryDriver != null) {
+        	secondaryDriver.quit();
+        	this.secondaryDriver = null;
+        	this.secondaryParentWindow = null;
+        	this.secondaryPopupWindow_1 = null;
+        	this.secondaryPopupWindow_2 = null;
         }
 	}
   	
 	public boolean isPrimaryDriverExists() {
-		return primaryDriver != null;
+		return this.primaryDriver != null;
+	}
+	
+	public boolean isSecondaryDriverExists() {
+		return this.secondaryDriver != null;
 	}
   	
   	private WebDriver createDriver() {

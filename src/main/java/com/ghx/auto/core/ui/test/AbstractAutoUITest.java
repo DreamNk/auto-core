@@ -153,6 +153,14 @@ public abstract class AbstractAutoUITest {
     }
     
     /**
+     * focus on the parent window of the secondary driver.
+     *
+     */
+    protected WebDriver focus_on_secondary_browser_parent_window() {
+    	return driverContext.getSecondaryDriverParentWindow();
+    }
+    
+    /**
      * focus on the pop-up window 1 of the driver.
      *
      */
@@ -169,11 +177,51 @@ public abstract class AbstractAutoUITest {
     }
     
     /**
+     * focus on the pop-up window 1 of the secondary driver.
+     *
+     */
+    protected WebDriver focus_on_secondary_browser_popup_window() {
+    	return driverContext.getSecondaryDriverPopupWindow_1();
+    }
+    
+    /**
+     * close pop-up window 1 of the secondary driver.
+     *
+     */
+    protected void close_secondary_browser_popup_window() {
+    	driverContext.closeSecondaryDriverPopupWindow_1();
+    }
+    
+    /**
      * focus on the pop-up window 2 of the driver.
      *
      */
     protected WebDriver focus_on_popup_window_2() {
     	return driverContext.getPopupWindow_2();
+    }
+    
+    /**
+     * close pop-up window 2 of the driver.
+     *
+     */
+    protected void close_popup_window_2() {
+    	driverContext.closePopupWindow_2();
+    }
+    
+    /**
+     * focus on the pop-up window 2 of the secondary driver.
+     *
+     */
+    protected WebDriver focus_on_secondary_browser_popup_window_2() {
+    	return driverContext.getSecondaryDriverPopupWindow_2();
+    }
+    
+    /**
+     * close pop-up window 2 of the secondary driver.
+     *
+     */
+    protected void close_secondary_browser_popup_window_2() {
+    	driverContext.closeSecondaryDriverPopupWindow_2();
     }
     
     /**
