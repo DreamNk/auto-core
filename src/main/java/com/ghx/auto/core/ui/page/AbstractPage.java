@@ -488,6 +488,12 @@ public abstract class AbstractPage<T extends AbstractPage<T>> {
         clickable.click();
         return me();
     }
+  	
+  	protected T double_click(By locator) {
+        WebElement clickable = findElement(ExpectedConditions.elementToBeClickable(locator));
+        new Actions(driver).moveToElement(clickable).doubleClick(clickable).perform();
+        return me();
+    }
   	 
     protected String getUrl() {
         return "";
