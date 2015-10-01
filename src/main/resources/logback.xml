@@ -10,13 +10,13 @@
             <maxHistory>15</maxHistory>
         </rollingPolicy>
         <encoder>
-            <pattern>%d{HH:mm:ss.SSS} [%-5level] %logger - %msg%n</pattern>
+            <pattern>[%-5level] %logger - %msg%n</pattern>
         </encoder>
     </appender>
 
     <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
         <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
-            <pattern>%d{HH:mm:ss.SSS} [%-5level] %logger - %msg%n</pattern>
+            <pattern>[%-5level] %logger - %msg%n</pattern>
         </encoder>
     </appender>
 
