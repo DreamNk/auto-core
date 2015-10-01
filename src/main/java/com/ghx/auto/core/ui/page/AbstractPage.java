@@ -35,6 +35,8 @@ import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.testng.Assert;
 
 import com.ghx.auto.core.ui.support.EnvConfig;
@@ -68,6 +70,7 @@ public abstract class AbstractPage<T extends AbstractPage<T>> {
 
     private static final int DEFAULT_TIMEOUT = 100;
     
+	protected Logger logger = LoggerFactory.getLogger(getClass().getSimpleName());
 
     /**
      * @return Page name.
