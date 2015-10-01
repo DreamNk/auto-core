@@ -12,6 +12,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.openqa.selenium.WebDriver;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.testng.Assert;
 import org.testng.ITestContext;
 import org.testng.annotations.BeforeClass;
@@ -36,9 +38,11 @@ public abstract class AbstractAutoUITest {
     private EnvConfig envConfig;
     
     private ITestContext context;
+    
+	protected Logger logger = LoggerFactory.getLogger(getClass().getSimpleName());
 
     protected SqlSessionFactory sessionFactory;
-
+    
     @BeforeClass(alwaysRun=true)
     public void init(ITestContext context) {
     	this.context = context;
@@ -317,6 +321,5 @@ public abstract class AbstractAutoUITest {
     protected void send_alert(String name, String message, Throwable exception) {
         new Alert(name, message, exception).send();
     }
-
     
 }
