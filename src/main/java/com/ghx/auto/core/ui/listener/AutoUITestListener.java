@@ -63,7 +63,7 @@ public class AutoUITestListener extends TestListenerAdapter {
     
     @Override
     public void onTestFailure(ITestResult result) {
-    	System.out.println("failed... " + result.getTestClass().getRealClass().getSimpleName() + " --> " + result.getName());
+    	System.out.println("FAILED... " + result.getTestClass().getRealClass().getSimpleName() + " --> " + result.getName());
         EnvConfig envConfig = (EnvConfig) result.getTestContext().getSuite().getAttribute(EnvConfig.class.getName());
     	String screenShotsLocation = getConfigParamValue(envConfig, "REPORTING", "screenShotsLocation");
         DriverContext driverContext = (DriverContext) result.getTestContext().getAttribute(DriverContext.class.getName());
