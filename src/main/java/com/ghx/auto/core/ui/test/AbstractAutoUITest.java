@@ -283,6 +283,14 @@ public abstract class AbstractAutoUITest {
     }
     
     /**
+     * Get the absolute path of the project root directory.
+     *
+     */
+    protected String getProjectRootDirectory() {
+    	return System.getProperty("user.dir");
+    }
+    
+    /**
      * Store the new attribute in test context.
      *
      * @param name String Attribute name.
