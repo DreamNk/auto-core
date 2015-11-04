@@ -9,6 +9,8 @@ import java.awt.Robot;
 import java.awt.Toolkit;
 import java.awt.datatransfer.StringSelection;
 import java.awt.event.KeyEvent;
+import java.io.File;
+import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -19,12 +21,15 @@ import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 import java.util.concurrent.Callable;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.By;
 import org.openqa.selenium.ElementNotVisibleException;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.NotFoundException;
+import org.openqa.selenium.OutputType;
 import org.openqa.selenium.StaleElementReferenceException;
+import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -301,6 +306,23 @@ public abstract class AbstractPage<T extends AbstractPage<T>> {
     public T deselect_all(By locator) {
     	Select selectable = findSelect(locator);
         selectable.deselectAll();
+        return me();
+    }
+    
+    public T capture_screenshot() {
+    	String screenShotsLocation = envConfig.getConfigParamValue("REPORTING", "screenShotsLocation");
+    	SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_HHmmss_SSS");
+
+        if (StringUtils.isNotBlank(screenShotsLocation)) {
+    		TakesScreenshot screenShot = (TakesScreenshot) this.driver;
+    		File file = screenShot.getScreenshotAs(OutputType.FILE);
+    		try {
+    			FileUtils.copyFile(file, new File(screenShotsLocation + "/" + getName() + "_" + sdf.format(new Date()) + ".png"));
+    		} catch (IOException e) {
+    			System.out.println("Unable to take screenshot for UI page: " + getName());
+    		}
+    	}	
+        
         return me();
     }
     
