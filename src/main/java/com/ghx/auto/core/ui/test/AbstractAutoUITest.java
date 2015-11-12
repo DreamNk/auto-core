@@ -22,6 +22,7 @@ import com.ghx.auto.core.db.domain.Scenario;
 import com.ghx.auto.core.db.mapper.Mapper;
 import com.ghx.auto.core.support.DBClient;
 import com.ghx.auto.core.support.FileAccessClient;
+import com.ghx.auto.core.support.MongoDBClient;
 import com.ghx.auto.core.support.RestClient;
 import com.ghx.auto.core.support.excel.ExcelClient;
 import com.ghx.auto.core.ui.page.AbstractPage;
@@ -253,6 +254,15 @@ public abstract class AbstractAutoUITest {
      */
     protected DBClient getDBClient(String section) {
     	return new DBClient(envConfig, section);
+    }
+    
+    /**
+     * Get MongoDB Client Utility.
+     *
+     * @param section Environment Configuration Section to be referred.
+     */
+    protected MongoDBClient getMongoDBClient(String section) {
+    	return new MongoDBClient(envConfig, section);
     }
     
     /**
