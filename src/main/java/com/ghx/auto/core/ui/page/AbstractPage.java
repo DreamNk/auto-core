@@ -362,6 +362,10 @@ public abstract class AbstractPage<T extends AbstractPage<T>> {
   		return findElement(locator).getAttribute(attributeName);
   	}
   	
+  	protected String find_element_attribute_value_without_wait(By locator, String attributeName) {
+  	    return this.driver.findElement(locator).getAttribute(attributeName);
+  	}
+  	
   	public String find_element_text(By locator) {
   		return findElement(locator).getText();
   	}
