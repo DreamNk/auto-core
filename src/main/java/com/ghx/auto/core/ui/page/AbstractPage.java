@@ -42,6 +42,7 @@ import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.util.Base64Utils;
 import org.testng.Assert;
 
 import com.ghx.auto.core.ui.support.EnvConfig;
@@ -628,6 +629,14 @@ public abstract class AbstractPage<T extends AbstractPage<T>> {
 		});
 
 		return me();
+	}
+	
+	public String encode_content(String content) {
+		return Base64Utils.encodeToString(content.getBytes());
+	}
+	
+	public String decode_content(String content) {
+		return new String(Base64Utils.decodeFromString(content));
 	}
   
     private WebElement findElement(By locator) {
