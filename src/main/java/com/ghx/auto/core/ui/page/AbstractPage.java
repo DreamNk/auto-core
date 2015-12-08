@@ -457,7 +457,12 @@ public abstract class AbstractPage<T extends AbstractPage<T>> {
 	    });
 	  	return me();
 	}
-  	
+ 	
+ 	public T verify_element_not_present(By locator) {
+ 		verify(ExpectedConditions.not(ExpectedConditions.presenceOfElementLocated(locator)));
+ 		return me();
+ 	}
+
     public T verify_element_by_text(By locator, String text) {
         verify(ExpectedConditions.textToBePresentInElementLocated(locator, text));
         return me();
