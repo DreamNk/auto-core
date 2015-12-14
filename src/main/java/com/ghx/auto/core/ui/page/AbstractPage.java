@@ -327,17 +327,17 @@ public abstract class AbstractPage<T extends AbstractPage<T>> {
         return me();
     }
     
-    protected T alert_comments(String text) {
+    public T alert_comments(String text) {
     	this.driver.switchTo().alert().sendKeys(text);
     	return me();
     }
 
-    protected T alert_accept() {
+    public T alert_accept() {
     	this.driver.switchTo().alert().accept();
     	return me();
     }
     
-    protected T alert_cancel() {
+    public T alert_cancel() {
     	this.driver.switchTo().alert().dismiss();
     	return me();
     }
