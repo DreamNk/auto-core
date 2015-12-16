@@ -313,14 +313,21 @@ public abstract class AbstractPage<T extends AbstractPage<T>> {
     public T capture_screenshot() {
     	String screenShotsLocation = envConfig.getConfigParamValue("REPORTING", "screenShotsLocation");
     	SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_HHmmss_SSS");
+    	
+    	String path = screenShotsLocation + "/" + getName() + "_" + sdf.format(new Date());
+    	
+    	return capture_screenshot(path);
+    }
+    
+    public T capture_screenshot(String path) {
 
-        if (StringUtils.isNotBlank(screenShotsLocation)) {
+    	if (StringUtils.isNotBlank(path)) {
     		TakesScreenshot screenShot = (TakesScreenshot) this.driver;
     		File file = screenShot.getScreenshotAs(OutputType.FILE);
     		try {
-    			FileUtils.copyFile(file, new File(screenShotsLocation + "/" + getName() + "_" + sdf.format(new Date()) + ".png"));
+    			FileUtils.copyFile(file, new File(path + ".png"));
     		} catch (IOException e) {
-    			System.out.println("Unable to take screenshot for UI page: " + getName());
+    			System.out.println("Unable to take screenshot for UI page: " + getName() + " with the file name: " + path + ".png");
     		}
     	}	
         
