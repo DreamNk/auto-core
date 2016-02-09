@@ -4,6 +4,7 @@
 
 package com.ghx.auto.core.ui.test;
 
+import java.io.IOException;
 import java.lang.reflect.Field;
 import java.util.List;
 import java.util.TreeSet;
@@ -11,12 +12,15 @@ import java.util.TreeSet;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
+import org.custommonkey.xmlunit.DetailedDiff;
+import org.custommonkey.xmlunit.XMLUnit;
 import org.openqa.selenium.WebDriver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.testng.Assert;
 import org.testng.ITestContext;
 import org.testng.annotations.BeforeClass;
+import org.xml.sax.SAXException;
 
 import com.ghx.auto.core.db.domain.Scenario;
 import com.ghx.auto.core.db.mapper.Mapper;
@@ -317,6 +321,28 @@ public abstract class AbstractAutoUITest {
      */
     protected String retrieve_test_data(String name) {
     	return (String) context.getAttribute(name);
+    }
+    
+    /**
+     * Compare XML.
+     *
+     */
+    protected void compare_xml(String expectedXml,String actualXml) {
+    	XMLUnit.setIgnoreWhitespace(true);
+		XMLUnit.setIgnoreComments(true);
+        XMLUnit.setIgnoreAttributeOrder(true);
+
+        DetailedDiff diff;
+		try {
+			diff = new DetailedDiff(XMLUnit.compareXML(expectedXml, actualXml));
+	        List<String> allDifferences = diff.getAllDifferences();
+	        Assert.assertTrue(allDifferences.size() == 0, "XMLs DID NOT MATCH!!!, " +  StringUtils.join(allDifferences.iterator(), ","));
+		} catch (SAXException e) {
+			Assert.fail("Unable to compare xmls, error is: " + e.getMessage());
+		} catch (IOException e) {
+			Assert.fail("Unable to compare xmls, error is: " + e.getMessage());
+		}
+        
     }
     
     /**

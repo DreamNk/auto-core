@@ -66,6 +66,7 @@
 		<hamcrest.version>1.3</hamcrest.version>
 		<springframework.version>4.1.4.RELEASE</springframework.version>
 		<eclipse-birt.version>4.4.2</eclipse-birt.version>
+		<xmlunit.version>1.6</xmlunit.version>
 	</properties>
   
   	<build>
@@ -221,6 +222,11 @@
 			<groupId>org.apache.poi</groupId>
 			<artifactId>poi</artifactId>
 			<version>${apache-poi.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>xmlunit</groupId>
+			<artifactId>xmlunit</artifactId>
+			<version>${xmlunit.version}</version>
 		</dependency>
 	</dependencies>
 </project>
