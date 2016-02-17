@@ -128,9 +128,9 @@ public abstract class AbstractPage<T extends AbstractPage<T>> {
     public T refresh_until(final By locator) {
 
     	verify(new ExpectedCondition<Boolean>() {
-        	int loop = 5;
-			
-        	@Override
+			int loop = 5;
+
+			@Override
 			public Boolean apply(WebDriver driver) {
 				while (loop-- > 0) {
 					if (driver.findElements(locator).size() > 0) {
@@ -142,7 +142,7 @@ public abstract class AbstractPage<T extends AbstractPage<T>> {
 				// exhausted number of max attempts
 				return false;
 			}
-        });
+		});
     	
         return me();
     }
@@ -536,6 +536,12 @@ public abstract class AbstractPage<T extends AbstractPage<T>> {
         new Actions(driver).moveToElement(clickable).doubleClick(clickable).perform();
         return me();
     }
+
+	protected T press_END_button(By locator){
+		WebElement clickable = findElement(ExpectedConditions.elementToBeClickable(locator));
+		clickable.sendKeys(Keys.END);
+		return me();
+	}
   	 
     protected String getUrl() {
         return "";
