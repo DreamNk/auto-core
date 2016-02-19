@@ -537,12 +537,6 @@ public abstract class AbstractPage<T extends AbstractPage<T>> {
         return me();
     }
 
-	protected T press_END_button(By locator){
-		WebElement clickable = findElement(ExpectedConditions.elementToBeClickable(locator));
-		clickable.sendKeys(Keys.END);
-		return me();
-	}
-  	 
     protected String getUrl() {
         return "";
     }
