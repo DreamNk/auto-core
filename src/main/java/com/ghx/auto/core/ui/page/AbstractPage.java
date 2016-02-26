@@ -44,6 +44,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.Base64Utils;
 import org.testng.Assert;
+import org.testng.asserts.SoftAssert;
 
 import com.ghx.auto.core.ui.support.EnvConfig;
 
@@ -77,6 +78,8 @@ public abstract class AbstractPage<T extends AbstractPage<T>> {
     private static final int DEFAULT_TIMEOUT = 100;
     
 	protected Logger logger = LoggerFactory.getLogger(getClass().getSimpleName());
+	
+	SoftAssert softassert = new SoftAssert();
 
     /**
      * @return Page name.
@@ -225,6 +228,12 @@ public abstract class AbstractPage<T extends AbstractPage<T>> {
             textField.sendKeys(text);
         }
         return me();
+    }
+    
+    public T type(By locator, String text) {
+    	WebElement textField = findElement(locator);
+    	textField.sendKeys(text);
+		return me();
     }
     
     public T browse_file(String filePath) {
@@ -484,6 +493,22 @@ public abstract class AbstractPage<T extends AbstractPage<T>> {
         Assert.assertEquals(element.getAttribute(attrName), attrValue);
         return me();
     }
+    
+	/** Method will record failures but don't throw exception on failure. 'run_all_soft_asserts' will throw exception of the recorded failure
+	 * @param locator 
+	 * @param text
+	 * @return
+	 */
+	public T soft_verify_element_by_text(By locator, String text){
+		String actual = find_element_text(locator);
+		softassert.assertEquals(actual, text, "\n Expected : [" + text + "] but found : [" + actual + "] ");
+		return me();
+	}
+		
+	public T run_all_soft_asserts(){
+		softassert.assertAll();
+		return me();
+	}
     
     public void refresh_page() {
     	driver.navigate().refresh();
