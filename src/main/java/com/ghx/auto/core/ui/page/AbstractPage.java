@@ -230,7 +230,7 @@ public abstract class AbstractPage<T extends AbstractPage<T>> {
         return me();
     }
     
-    public T type(By locator, String text) {
+    public T enter_on_invisible_element(By locator, String text) {
     	WebElement textField = findElement(locator);
     	textField.sendKeys(text);
 		return me();
@@ -493,19 +493,14 @@ public abstract class AbstractPage<T extends AbstractPage<T>> {
         Assert.assertEquals(element.getAttribute(attrName), attrValue);
         return me();
     }
-    
-	/** Method will record failures but don't throw exception on failure. 'run_all_soft_asserts' will throw exception of the recorded failure
-	 * @param locator 
-	 * @param text
-	 * @return
-	 */
-	public T soft_verify_element_by_text(By locator, String text){
+
+	protected T verify_element_by_text_continue(By locator, String text){
 		String actual = find_element_text(locator);
 		softassert.assertEquals(actual, text, "\n Expected : [" + text + "] but found : [" + actual + "] ");
 		return me();
 	}
 		
-	public T run_all_soft_asserts(){
+	public T verify_continue_or_stop(){
 		softassert.assertAll();
 		return me();
 	}
