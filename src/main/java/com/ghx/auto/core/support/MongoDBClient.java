@@ -11,6 +11,7 @@ import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.SimpleMongoDbFactory;
 import org.springframework.data.mongodb.core.query.BasicQuery;
+import org.springframework.data.mongodb.core.query.BasicUpdate;
 import org.testng.Assert;
 
 import com.ghx.auto.core.ui.support.EnvConfig;
@@ -55,6 +56,16 @@ public class MongoDBClient {
     	
     }
     
+    public void update_collection(String collectionName, String queryString, String updateString) {
+        try {
+               mongoOperations.updateMulti(new BasicQuery(queryString), new BasicUpdate(updateString), collectionName);
+        } catch (MongoException me) {
+               Assert.fail("Unable to update collection, error message: " + me.getMessage());
+        } catch (DataAccessException me) {
+               Assert.fail("Unable to update collections, error message: " + me.getMessage());
+        }
+    }
+
     public MongoDBClient verify_collection_count(String collectionName, String query, long expectedCount) {
     	long actualCount = get_collection_count(collectionName, query);
     	Assert.assertEquals(actualCount, expectedCount);
