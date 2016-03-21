@@ -480,7 +480,8 @@ public abstract class AbstractPage<T extends AbstractPage<T>> {
  	}
 
     public T verify_element_by_text(By locator, String text) {
-        verify(ExpectedConditions.textToBePresentInElementLocated(locator, text));
+        String actual = find_element_text(locator);
+		Assert.assertEquals(actual, text, "\n Expected : [" + text + "] but found : [" + actual + "] ");
         return me();
     }
     
