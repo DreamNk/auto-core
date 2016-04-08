@@ -25,6 +25,7 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.By;
 import org.openqa.selenium.ElementNotVisibleException;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.NotFoundException;
 import org.openqa.selenium.OutputType;
@@ -666,6 +667,23 @@ public abstract class AbstractPage<T extends AbstractPage<T>> {
 	    	}
 		});
 
+		return me();
+	}
+	
+	public T wait_until_page_loaded() {
+		verify(new ExpectedCondition<Boolean>() {
+			
+			@Override
+			public Boolean apply(WebDriver driver) {
+				return (((JavascriptExecutor) driver).executeScript("return document.readyState").toString().equals("complete"));
+			}
+
+			@Override
+			public String toString() {
+				return String.format("The page is not loaded completly within the timeout");
+			}
+		});
+		
 		return me();
 	}
 	
