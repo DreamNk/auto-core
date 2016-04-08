@@ -28,6 +28,7 @@ import com.ghx.auto.core.support.DBClient;
 import com.ghx.auto.core.support.FileAccessClient;
 import com.ghx.auto.core.support.MongoDBClient;
 import com.ghx.auto.core.support.RestClient;
+import com.ghx.auto.core.support.S3Client;
 import com.ghx.auto.core.support.excel.ExcelClient;
 import com.ghx.auto.core.ui.page.AbstractPage;
 import com.ghx.auto.core.ui.support.Alert;
@@ -276,6 +277,15 @@ public abstract class AbstractAutoUITest {
      */
     protected ExcelClient getExcelClient(String section) {
     	return new ExcelClient(envConfig, section);
+    }
+    
+    /**
+     * Get S3 Client Utility.
+     *
+     * @param section Environment Configuration Section to be referred.
+     */
+    protected S3Client getS3Client(String section) {
+    	return new S3Client(envConfig, section);
     }
     
     /**
