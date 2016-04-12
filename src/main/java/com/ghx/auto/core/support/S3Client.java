@@ -74,7 +74,7 @@ public class S3Client {
 		ClientConfiguration clientConfig = new ClientConfiguration();
 		clientConfig.setProtocol(Protocol.HTTPS);
 		conn = new AmazonS3Client(credentials, clientConfig);
-		conn.setEndpoint(getConfigParamValue("baseUrl"));
+		//conn.setEndpoint(getConfigParamValue("baseUrl"));
 	}
 
 	private String getConfigParamValue(String param) {
