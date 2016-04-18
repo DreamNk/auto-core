@@ -481,8 +481,25 @@ public abstract class AbstractPage<T extends AbstractPage<T>> {
  	}
 
     public T verify_element_by_text(By locator, String text) {
-        String actual = find_element_text(locator);
-		Assert.assertEquals(actual, text, "\n Expected : [" + text + "] but found : [" + actual + "] ");
+        final String expected = text;
+    	final String actual = find_element_text(locator);
+
+        verify(new ExpectedCondition<Boolean>() {
+
+	    	@Override
+			public Boolean apply(WebDriver driver) {
+				if (expected.equals(actual)) {
+					return Boolean.TRUE; //element text matched
+				}
+				return Boolean.FALSE; //element text not matched
+			}
+	    	
+	    	@Override
+	    	public String toString() {
+	    		return String.format(" Expected: ['%s'] but found: ['%s']", expected,actual);
+	    	} 
+	    });
+        
         return me();
     }
     
