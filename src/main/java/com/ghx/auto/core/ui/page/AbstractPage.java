@@ -480,15 +480,13 @@ public abstract class AbstractPage<T extends AbstractPage<T>> {
  		return me();
  	}
 
-    public T verify_element_by_text(By locator, String text) {
-        final String expected = text;
-    	final String actual = find_element_text(locator);
-
-        verify(new ExpectedCondition<Boolean>() {
+    public T verify_element_by_text(final By locator, final String text) {
+        
+    	verify(new ExpectedCondition<Boolean>() {
 
 	    	@Override
 			public Boolean apply(WebDriver driver) {
-				if (expected.equals(actual)) {
+				if (text.equals(find_element_text(locator))) {
 					return Boolean.TRUE; //element text matched
 				}
 				return Boolean.FALSE; //element text not matched
@@ -496,7 +494,7 @@ public abstract class AbstractPage<T extends AbstractPage<T>> {
 	    	
 	    	@Override
 	    	public String toString() {
-	    		return String.format(" Expected: ['%s'] but found: ['%s']", expected,actual);
+	    		return String.format(" Expected: [%s] but found: [%s], locator is: [%s]", text, find_element_text(locator), locator);
 	    	} 
 	    });
         
