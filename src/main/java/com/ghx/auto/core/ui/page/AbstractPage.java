@@ -486,10 +486,11 @@ public abstract class AbstractPage<T extends AbstractPage<T>> {
 
 	    	@Override
 			public Boolean apply(WebDriver driver) {
-				if (text.equals(find_element_text(locator))) {
-					return Boolean.TRUE; //element text matched
-				}
-				return Boolean.FALSE; //element text not matched
+				try {
+			        return text.equals(find_element_text(locator));
+			    } catch (StaleElementReferenceException e) {
+			        return Boolean.FALSE;
+			    }
 			}
 	    	
 	    	@Override
