@@ -4,6 +4,7 @@
 
 package com.ghx.auto.core.support.excel;
 
+import java.io.ByteArrayInputStream;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -36,6 +37,15 @@ public class ExcelClient {
 			Assert.fail("Unable to find the configured excel sheet, path: " + getConfigParamValue("path"));
 		}
     }
+    
+	public ExcelClient(EnvConfig envConfig, String content, String sheetName) {
+		this.envConfig = envConfig;
+		try {
+			loadSheet(new ByteArrayInputStream(content.getBytes("ISO-8859-1")), sheetName);
+		} catch (IOException ioe) {
+			Assert.fail("Unable to the content : " + content);
+		}
+	}
     
     public Object[][] get_all_rows() {
     	Object[][] array = new Object[sheet.size()][2];
