@@ -107,7 +107,7 @@ public class ExcelClient {
     	String headerArray[] = new String[1];
     	try {
     		XSSFWorkbook workbook = new XSSFWorkbook(content);
-            XSSFSheet sheet = workbook.getSheet(getConfigParamValue(sheetName));
+            XSSFSheet sheet = workbook.getSheet(sheetName);
        	 	
             Assert.assertNotNull(sheet, "Configured excel sheet is not existing, path: " + sheetName);
             int firstRowNumber = sheet.getFirstRowNum();
@@ -140,13 +140,11 @@ public class ExcelClient {
 				sheetData.put(row.getRowNum() + 1, new ExcelRow(rowData, headerArray));  
                 
              } // loop for rows
-           	 } catch (FileNotFoundException fnf) {
-         	 Assert.fail("Unable to find the configured excel sheet, path: " + getConfigParamValue("path"));
-         } catch (IOException ioe) {
-        	 Assert.fail("Unable to load the configured excel sheet, path: " + getConfigParamValue("path"));
+           	 }catch (IOException ioe) {
+           		Assert.fail("Unable to load the configured excel sheet, path: " + sheetName);
          }
     	
-    	 Assert.assertFalse(sheetData.isEmpty(), "Configured excel sheet is empty, path: " + getConfigParamValue("path"));
+    	Assert.assertFalse(sheetData.isEmpty(), "Configured excel sheet is empty, path: " + sheetName);
     	 this.sheet = sheetData; 
     }
     
