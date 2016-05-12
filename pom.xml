@@ -68,6 +68,7 @@
 		<eclipse-birt.version>4.4.2</eclipse-birt.version>
 		<xmlunit.version>1.6</xmlunit.version>
 		<amazonaws.version>1.10.64</amazonaws.version>
+		<beanutils.version>1.6</beanutils.version>
 	</properties>
   
   	<build>
@@ -233,6 +234,12 @@
 			<groupId>com.amazonaws</groupId>
 			<artifactId>aws-java-sdk</artifactId>
 			<version>${amazonaws.version}</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>commons-beanutils</groupId>
+			<artifactId>commons-beanutils</artifactId>
+			<version>${beanutils.version}</version>
 		</dependency>
 	</dependencies>
 </project>

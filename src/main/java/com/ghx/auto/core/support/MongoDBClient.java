@@ -1,10 +1,14 @@
 package com.ghx.auto.core.support;
 
+import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.net.UnknownHostException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Set;
 
+import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.dao.DataAccessException;
 import org.springframework.data.mongodb.core.MongoOperations;
@@ -14,8 +18,10 @@ import org.springframework.data.mongodb.core.query.BasicQuery;
 import org.springframework.data.mongodb.core.query.BasicUpdate;
 import org.testng.Assert;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ghx.auto.core.ui.support.EnvConfig;
 import com.mongodb.BasicDBObject;
+import com.mongodb.Cursor;
 import com.mongodb.MongoClientURI;
 import com.mongodb.MongoException;
 
@@ -24,6 +30,7 @@ public class MongoDBClient {
 	private EnvConfig envConfig;
 	private String section; 
 	private MongoOperations mongoOperations;
+	private Cursor cursor;
 	
     public MongoDBClient(EnvConfig envConfig, String section) {
     	this.envConfig = envConfig;
@@ -55,6 +62,27 @@ public class MongoDBClient {
     	return 0; //should not happen
     	
     }
+    
+    public void verify_json_element_value(String jsonPath, String value) {
+		BasicDBObject dbObject;
+		ArrayList<String> valueArrayList = new ArrayList<>();
+		while (cursor.hasNext()) {
+			dbObject = (BasicDBObject) cursor.next();
+			try {
+				valueArrayList.add(PropertyUtils
+						.getProperty(new ObjectMapper().readValue(dbObject.toJson(), Object.class), jsonPath)
+						.toString());
+			} catch (IOException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
+				Assert.fail("Unable to retrieve the value for given Json Path, error message: " + e.getMessage());
+			}
+		}
+		Assert.assertTrue(valueArrayList.contains(value), "Json value not found for provided Json Element, expected value is : " + value);
+	}
+
+	public MongoDBClient execute_query(String collectionName, String queryFilter) {
+		cursor = mongoOperations.getCollection(collectionName).find(BasicDBObject.parse(queryFilter));
+		return this;
+	}
     
     public void update_collection(String collectionName, String queryString, String updateString) {
         try {
