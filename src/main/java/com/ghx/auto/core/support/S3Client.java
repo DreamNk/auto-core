@@ -1,7 +1,10 @@
 package com.ghx.auto.core.support;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 
 import org.apache.commons.io.IOUtils;
 import org.testng.Assert;
@@ -34,7 +37,7 @@ public class S3Client {
 		S3Object object = conn.getObject(new GetObjectRequest(bucket, fileName));
 		InputStream objectData = object.getObjectContent();
 		try {
-			return IOUtils.toString(objectData, "UTF-8");
+			return IOUtils.toString(objectData, "ISO-8859-1");
 		} catch (IOException ie) {
 			Assert.fail("Failure reading the file from the bucket: " + bucket + ", file name:  " + fileName
 					+ ", error message: " + ie.getMessage());
@@ -52,7 +55,7 @@ public class S3Client {
 	public void write_file_to_s3(String bucketName, String fileName, String content) {
 		ObjectMetadata metadata = new ObjectMetadata();
 		try {
-			InputStream is = IOUtils.toInputStream(content, "UTF-8");
+			InputStream is = IOUtils.toInputStream(content, "ISO-8859-1");
 			metadata.setContentLength(Long.valueOf(is.available()));
 			conn.putObject(bucketName, fileName, is, metadata);
 			is.close();
@@ -68,13 +71,32 @@ public class S3Client {
 		}
 	}
 
+	public void write_zip_file_to_s3(String bucketName, String zipFileName, String strToZip, String zipFileEntry) {
+		ByteArrayOutputStream baos = new ByteArrayOutputStream();
+		try (ZipOutputStream zos = new ZipOutputStream(baos)) {
+			zos.putNextEntry(new ZipEntry(zipFileEntry));
+			zos.write(strToZip.getBytes());
+			zos.closeEntry();
+		} catch (IOException ioe) {
+			Assert.fail("Unable to generate zip file due to some internal error, for File :"
+					+ zipFileName + " , error message: " + ioe.getMessage());
+		} finally {
+			try {
+				write_file_to_s3(bucketName, zipFileName, IOUtils.toString(baos.toByteArray(), "ISO-8859-1"));
+			} catch (Exception ie) {
+					Assert.fail("Unable to upload file due to some internal error, bucket: " + bucketName + ", file:"
+						+ zipFileName + " , error message: " + ie.getMessage());
+			}
+		}
+	}
+	
 	private void createS3Connetion() {
 		AWSCredentials credentials = new BasicAWSCredentials(getConfigParamValue("accessKey"),
 				getConfigParamValue("secretKey"));
 		ClientConfiguration clientConfig = new ClientConfiguration();
 		clientConfig.setProtocol(Protocol.HTTPS);
 		conn = new AmazonS3Client(credentials, clientConfig);
-		//conn.setEndpoint(getConfigParamValue("baseUrl"));
+//		conn.setEndpoint(getConfigParamValue("baseUrl"));
 	}
 
 	private String getConfigParamValue(String param) {
