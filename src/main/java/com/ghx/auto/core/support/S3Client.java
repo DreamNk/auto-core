@@ -4,6 +4,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
 
 import org.apache.commons.io.IOUtils;
@@ -88,6 +89,19 @@ public class S3Client {
 						+ zipFileName + " , error message: " + ie.getMessage());
 			}
 		}
+	}
+	
+	public String read_zip_file_from_s3(String bucketName, String zipFileName) {
+		try {
+			ZipInputStream zipInputStream = new ZipInputStream(
+					IOUtils.toInputStream(read_file_from_s3(bucketName, zipFileName), "ISO-8859-1"));
+			zipInputStream.getNextEntry();
+			return IOUtils.toString(zipInputStream, "ISO-8859-1");
+		} catch (IOException ioe) {
+			Assert.fail("Failure reading the file from the bucket: " + bucketName + ", file name:  " + zipFileName
+					+ ", error message: " + ioe.getMessage());
+		}
+		return null;
 	}
 	
 	private void createS3Connetion() {
