@@ -84,6 +84,7 @@ public class S3Client {
 		} finally {
 			try {
 				write_file_to_s3(bucketName, zipFileName, IOUtils.toString(baos.toByteArray(), "ISO-8859-1"));
+				baos.close();
 			} catch (Exception ie) {
 					Assert.fail("Unable to upload file due to some internal error, bucket: " + bucketName + ", file:"
 						+ zipFileName + " , error message: " + ie.getMessage());
@@ -92,14 +93,21 @@ public class S3Client {
 	}
 	
 	public String read_zip_file_from_s3(String bucketName, String zipFileName) {
+		ZipInputStream zipInputStream = null;
 		try {
-			ZipInputStream zipInputStream = new ZipInputStream(
+			zipInputStream = new ZipInputStream(
 					IOUtils.toInputStream(read_file_from_s3(bucketName, zipFileName), "ISO-8859-1"));
 			zipInputStream.getNextEntry();
 			return IOUtils.toString(zipInputStream, "ISO-8859-1");
 		} catch (IOException ioe) {
 			Assert.fail("Failure reading the file from the bucket: " + bucketName + ", file name:  " + zipFileName
 					+ ", error message: " + ioe.getMessage());
+		}finally{
+			try{
+				zipInputStream.close();
+			}catch(IOException ioe){
+			
+			}
 		}
 		return null;
 	}
