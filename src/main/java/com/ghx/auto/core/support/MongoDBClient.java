@@ -6,6 +6,7 @@ import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.NoSuchElementException;
 import java.util.Set;
 
 import org.apache.commons.beanutils.PropertyUtils;
@@ -17,11 +18,10 @@ import org.springframework.data.mongodb.core.SimpleMongoDbFactory;
 import org.springframework.data.mongodb.core.query.BasicQuery;
 import org.springframework.data.mongodb.core.query.BasicUpdate;
 import org.testng.Assert;
-
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ghx.auto.core.ui.support.EnvConfig;
 import com.mongodb.BasicDBObject;
-import com.mongodb.Cursor;
+import com.mongodb.DBCursor;
 import com.mongodb.MongoClientURI;
 import com.mongodb.MongoException;
 
@@ -30,7 +30,7 @@ public class MongoDBClient {
 	private EnvConfig envConfig;
 	private String section; 
 	private MongoOperations mongoOperations;
-	private Cursor cursor;
+	private DBCursor dbCursor;
 	
     public MongoDBClient(EnvConfig envConfig, String section) {
     	this.envConfig = envConfig;
@@ -63,24 +63,32 @@ public class MongoDBClient {
     	
     }
     
-    public void verify_json_element_value(String jsonPath, String value) {
-		BasicDBObject dbObject;
-		ArrayList<String> valueArrayList = new ArrayList<>();
-		while (cursor.hasNext()) {
-			dbObject = (BasicDBObject) cursor.next();
-			try {
-				valueArrayList.add(PropertyUtils
-						.getProperty(new ObjectMapper().readValue(dbObject.toJson(), Object.class), jsonPath)
-						.toString());
-			} catch (IOException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
-				Assert.fail("Unable to retrieve the value for given Json Path, error message: " + e.getMessage());
-			}
+	public String get_json_element_value(String jsonPath) {
+		try {
+			return PropertyUtils.getProperty(
+					new ObjectMapper().readValue(((BasicDBObject) dbCursor.copy().next()).toJson(), Object.class),
+					jsonPath).toString();
+		} catch (IOException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
+			Assert.fail("Unable to retrieve the value for given Json Path, error message: " + e.getMessage());
 		}
-		Assert.assertTrue(valueArrayList.contains(value), "Json value not found for provided Json Element, expected value is : " + value);
+		return null;
+	}
+    
+    public void verify_json_element_value(String jsonPath, String value) {
+    	try {
+			Assert.assertTrue(
+					PropertyUtils.getProperty(
+							new ObjectMapper().readValue(((BasicDBObject) dbCursor.copy().next()).toJson(), Object.class),
+							jsonPath).toString().equals(value),
+					"Verification failed for provided Json Element, expected value is : " + value);
+		} catch (IOException | IllegalAccessException | InvocationTargetException | NoSuchMethodException | NoSuchElementException e) {
+			Assert.fail("Unable to retrieve the value for given Json Path, error message: " + e.getMessage());
+		}
 	}
 
 	public MongoDBClient execute_query(String collectionName, String queryFilter) {
-		cursor = mongoOperations.getCollection(collectionName).find(BasicDBObject.parse(queryFilter));
+		dbCursor = mongoOperations.getCollection(collectionName).find(BasicDBObject.parse(queryFilter));
+		Assert.assertTrue(dbCursor.copy().hasNext(), "Json not found for provided query filter : " + queryFilter);
 		return this;
 	}
     
