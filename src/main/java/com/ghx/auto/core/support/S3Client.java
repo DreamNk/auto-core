@@ -79,16 +79,20 @@ public class S3Client {
 			zos.write(strToZip.getBytes());
 			zos.closeEntry();
 		} catch (IOException ioe) {
-			Assert.fail("Unable to generate zip file due to some internal error, for File :"
-					+ zipFileName + " , error message: " + ioe.getMessage());
+			Assert.fail("Unable to generate zip for File :"	+ zipFileName + " , error message: " + ioe.getMessage());
 		} finally {
 			try {
-				write_file_to_s3(bucketName, zipFileName, IOUtils.toString(baos.toByteArray(), "ISO-8859-1"));
 				baos.close();
 			} catch (Exception ie) {
-					Assert.fail("Unable to upload file due to some internal error, bucket: " + bucketName + ", file:"
+					Assert.fail("Unable to upload file to the bucket: " + bucketName + ", file:"
 						+ zipFileName + " , error message: " + ie.getMessage());
 			}
+		}
+		try{
+			write_file_to_s3(bucketName, zipFileName, IOUtils.toString(baos.toByteArray(), "ISO-8859-1"));
+		}catch(IOException ioe){
+			Assert.fail("Unable to upload file to the bucket: " + bucketName + ", file:"
+					+ zipFileName + " , error message: " + ioe.getMessage());
 		}
 	}
 	
@@ -106,7 +110,8 @@ public class S3Client {
 			try{
 				zipInputStream.close();
 			}catch(IOException ioe){
-			
+				Assert.fail("Failure reading the file from the bucket: " + bucketName + ", file name:  " + zipFileName
+						+ ", error message: " + ioe.getMessage());
 			}
 		}
 		return null;
