@@ -279,6 +279,16 @@ public abstract class AbstractAutoUITest {
     	return new ExcelClient(envConfig, section);
     }
     
+	/**
+	 * Get Excel Client Utility.
+	 *
+	 * @param section
+	 *            Environment Configuration Section to be referred.
+	 */
+	protected ExcelClient getExcelClient(String content, String sheetName) {
+		return new ExcelClient(envConfig, content, sheetName);
+	}
+    
     /**
      * Get S3 Client Utility.
      *

@@ -4,9 +4,12 @@
 
 package com.ghx.auto.core.support.excel;
 
+import java.io.ByteArrayInputStream;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -28,8 +31,21 @@ public class ExcelClient {
     public ExcelClient(EnvConfig envConfig, String section) {
     	this.envConfig = envConfig;
     	this.section = section;
-    	loadSheet();
+    	try {
+			loadSheet(new FileInputStream(getConfigParamValue("path")), getConfigParamValue("sheetName"));
+		} catch (FileNotFoundException fnf) {
+			Assert.fail("Unable to find the configured excel sheet, path: " + getConfigParamValue("path"));
+		}
     }
+    
+	public ExcelClient(EnvConfig envConfig, String content, String sheetName) {
+		this.envConfig = envConfig;
+		try {
+			loadSheet(new ByteArrayInputStream(content.getBytes("ISO-8859-1")), sheetName);
+		} catch (IOException ioe) {
+			Assert.fail("Unable to the content : " + content);
+		}
+	}
     
     public Object[][] get_all_rows() {
     	Object[][] array = new Object[sheet.size()][2];
@@ -96,15 +112,15 @@ public class ExcelClient {
     	}
     }
     
-    private void loadSheet() {
+    private void loadSheet(InputStream content, String sheetName) {
     	Map<Integer, ExcelRow> sheetData = new HashMap<Integer, ExcelRow>();
+    	String headerArray[] = new String[1];
     	try {
-    		FileInputStream file = new FileInputStream(getConfigParamValue("path"));
-            XSSFWorkbook workbook = new XSSFWorkbook(file);
-            XSSFSheet sheet = workbook.getSheet(getConfigParamValue("sheetName"));
+    		XSSFWorkbook workbook = new XSSFWorkbook(content);
+            XSSFSheet sheet = workbook.getSheet(sheetName);
        	 	
-            Assert.assertNotNull(sheet, "Configured excel sheet is not existing, path: " + getConfigParamValue("path"));
-
+            Assert.assertNotNull(sheet, "Configured excel sheet is not existing, path: " + sheetName);
+            int firstRowNumber = sheet.getFirstRowNum();
             Iterator<Row> rowIterator = sheet.iterator();
             while (rowIterator.hasNext()) {
             	Row row = rowIterator.next();
@@ -128,17 +144,17 @@ public class ExcelClient {
                             break;
                     } //end of switch case
                 } //loop for cells in a row
-                sheetData.put(row.getRowNum()+1, new ExcelRow(rowData));   
+                if (row.getRowNum() == firstRowNumber) {
+					headerArray = Arrays.copyOf(rowData, rowData.length, String[].class);
+				}
+				sheetData.put(row.getRowNum() + 1, new ExcelRow(rowData, headerArray));  
                 
              } // loop for rows
-             file.close();
-    	 } catch (FileNotFoundException fnf) {
-         	 Assert.fail("Unable to find the configured excel sheet, path: " + getConfigParamValue("path"));
-         } catch (IOException ioe) {
-        	 Assert.fail("Unable to load the configured excel sheet, path: " + getConfigParamValue("path"));
+           	 }catch (IOException ioe) {
+           		Assert.fail("Unable to load the configured excel sheet, path: " + sheetName);
          }
     	
-    	 Assert.assertFalse(sheetData.isEmpty(), "Configured excel sheet is empty, path: " + getConfigParamValue("path"));
+    	Assert.assertFalse(sheetData.isEmpty(), "Configured excel sheet is empty, path: " + sheetName);
     	 this.sheet = sheetData; 
     }
     
