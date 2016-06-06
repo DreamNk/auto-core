@@ -4,6 +4,8 @@
 
 package com.ghx.auto.core.support.excel;
 
+import java.util.Arrays;
+
 import com.ibm.icu.impl.Assert;
 
 
@@ -11,10 +13,30 @@ import com.ibm.icu.impl.Assert;
 public class ExcelRow {
 	
     private Object[] rowData;
+    String rowHeader[];
     
-    public ExcelRow(Object[] rowData) {
+    public ExcelRow(Object[] rowData,String[] rowHeader) {
     	this.rowData = rowData;
+    	this.rowHeader = rowHeader;
     }
+    
+    public String get_column_string_value_by_header(String header) {
+		int position = Arrays.asList(rowHeader).indexOf(header);
+		validate_column_position(position);
+		return (String) rowData[position];
+	}
+
+	public int get_column_int_value_by_header(String header) {
+		int position = Arrays.asList(rowHeader).indexOf(header);
+		validate_column_position(position);
+		return ((Double) rowData[position]).intValue();
+	}
+
+	public boolean get_column_boolean_value_by_header(String header) {
+		int position = Arrays.asList(rowHeader).indexOf(header);
+		validate_column_position(position);
+		return (Boolean) rowData[position];
+	}
     
     public int get_column_int_value(int position) {
     	validate_column_position(position);

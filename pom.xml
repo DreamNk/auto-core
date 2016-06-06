@@ -20,13 +20,13 @@
     	 	</snapshots>
          	<id>GHX</id>
          	<name>ghx-release</name>
-         	<url>http://artifactory.ghx.com:8081/artifactory/ghx-release</url>
+         	<url>https://ghxrepo.artifactoryonline.com/ghxrepo/ghx-release</url>
        </repository>
         <repository>
           	<snapshots />
           	<id>GHX Snapshot</id>
           	<name>ghx-snapshot</name>
-          	<url>http://artifactory.ghx.com:8081/artifactory/ghx-snapshot</url>
+          	<url>https://ghxrepo.artifactoryonline.com/ghxrepo/ghx-snapshot</url>
         </repository>
    	</repositories>
 	
@@ -34,12 +34,12 @@
 		<repository>
 			<id>GHX</id>
 			<name>GHX Artifactory-releases</name>
-			<url>http://artifactory.ghx.com:8081/artifactory/TestAutomation</url>
+			<url>https://ghxrepo.artifactoryonline.com/ghxrepo/TestAutomation</url>
 		</repository>
   		<snapshotRepository>
         	<id>GHX Snapshot</id>
         	<name>GHX Artifactory-snapshots</name>
-        	<url>http://artifactory.ghx.com:8081/artifactory/TestAutomation-snapshot</url>
+        	<url>https://ghxrepo.artifactoryonline.com/ghxrepo/TestAutomation-snapshot</url>
     	</snapshotRepository>
  	</distributionManagement>
 
