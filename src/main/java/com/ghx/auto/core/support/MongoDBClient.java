@@ -30,7 +30,7 @@ public class MongoDBClient {
 	private EnvConfig envConfig;
 	private String section; 
 	private MongoOperations mongoOperations;
-	private DBCursor dbCursor;
+	private Object dbjSon;
 	
     public MongoDBClient(EnvConfig envConfig, String section) {
     	this.envConfig = envConfig;
@@ -65,30 +65,32 @@ public class MongoDBClient {
     
 	public String get_json_element_value(String jsonPath) {
 		try {
-			return PropertyUtils.getProperty(
-					new ObjectMapper().readValue(((BasicDBObject) dbCursor.copy().next()).toJson(), Object.class),
-					jsonPath).toString();
-		} catch (IOException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
-			Assert.fail("Unable to retrieve the value for given Json Path, error message: " + e.getMessage());
+			return PropertyUtils.getProperty(dbjSon, jsonPath).toString();
+		} catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
+			Assert.fail("Unable to retrieve the value for given Json Path \"" + jsonPath + "\", error message: " + e.getMessage());
 		}
 		return null;
 	}
     
     public void verify_json_element_value(String jsonPath, String value) {
     	try {
-			Assert.assertTrue(
-					PropertyUtils.getProperty(
-							new ObjectMapper().readValue(((BasicDBObject) dbCursor.copy().next()).toJson(), Object.class),
-							jsonPath).toString().equals(value),
+    		Assert.assertTrue(PropertyUtils.getProperty(dbjSon, jsonPath).toString().equals(value),
 					"Verification failed for provided Json Element, expected value is : " + value);
-		} catch (IOException | IllegalAccessException | InvocationTargetException | NoSuchMethodException | NoSuchElementException e) {
-			Assert.fail("Unable to retrieve the value for given Json Path, error message: " + e.getMessage());
+		} catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException | NoSuchElementException|IndexOutOfBoundsException e) {
+			Assert.fail("Unable to retrieve the value for given Json Path \"" + jsonPath + "\", error message: "
+					+ e.getMessage());
 		}
 	}
 
 	public MongoDBClient execute_query(String collectionName, String queryFilter) {
-		dbCursor = mongoOperations.getCollection(collectionName).find(BasicDBObject.parse(queryFilter));
+		DBCursor dbCursor = mongoOperations.getCollection(collectionName).find(BasicDBObject.parse(queryFilter));
 		Assert.assertTrue(dbCursor.copy().hasNext(), "Json not found for provided query filter : " + queryFilter);
+		try {
+			dbjSon = new ObjectMapper().readValue(((BasicDBObject) dbCursor.copy().next()).toJson(), Object.class);
+		} catch (IOException e) {
+			Assert.fail("Unable to retrieve the value for given query filter :" + queryFilter + ", error message: "
+					+ e.getMessage());
+		}
 		return this;
 	}
     

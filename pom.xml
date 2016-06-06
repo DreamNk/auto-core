@@ -68,7 +68,7 @@
 		<eclipse-birt.version>4.4.2</eclipse-birt.version>
 		<xmlunit.version>1.6</xmlunit.version>
 		<amazonaws.version>1.10.64</amazonaws.version>
-		<beanutils.version>1.6</beanutils.version>
+		<beanutils.version>1.9.2</beanutils.version>
 	</properties>
   
   	<build>
