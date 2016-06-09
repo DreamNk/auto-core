@@ -349,7 +349,7 @@ public abstract class AbstractAutoUITest {
      */
     protected void compare_xml(String expectedXml,String actualXml) {
     	XMLUnit.setIgnoreWhitespace(true);
-		XMLUnit.setIgnoreComments(true);
+		XMLUnit.setIgnoreComments(false);
         XMLUnit.setIgnoreAttributeOrder(true);
 
         DetailedDiff diff;
