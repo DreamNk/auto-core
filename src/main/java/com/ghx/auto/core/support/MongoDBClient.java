@@ -72,11 +72,24 @@ public class MongoDBClient {
 		return null;
 	}
     
-    public void verify_json_element_value(String jsonPath, String value) {
+    public void verify_json_element_value_for_equals(String jsonPath, String value) {
     	try {
     		Assert.assertTrue(PropertyUtils.getProperty(dbjSon, jsonPath).toString().equals(value),
 					"Verification failed for provided Json Element, expected value is : " + value);
 		} catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException | NoSuchElementException|IndexOutOfBoundsException e) {
+			Assert.fail("Unable to retrieve the value for given Json Path \"" + jsonPath + "\", error message: "
+					+ e.getMessage());
+		}
+	}
+    
+	public void verify_json_element_value_for_contains(String jsonPath, String value) {
+		System.out.println("JSon Path : " + jsonPath);
+		System.out.println("JSon Value : " + value);
+		try {
+			Assert.assertTrue(PropertyUtils.getProperty(dbjSon, jsonPath).toString().contains(value),
+					"Verification failed for provided Json Element, expected value is : " + value);
+		} catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException | NoSuchElementException
+				| IndexOutOfBoundsException e) {
 			Assert.fail("Unable to retrieve the value for given Json Path \"" + jsonPath + "\", error message: "
 					+ e.getMessage());
 		}
