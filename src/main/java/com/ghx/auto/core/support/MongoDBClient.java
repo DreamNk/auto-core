@@ -72,7 +72,7 @@ public class MongoDBClient {
 		return null;
 	}
     
-    public void verify_json_element_value_for_equals(String jsonPath, String value) {
+    public void verify_json_element_value_by_equals(String jsonPath, String value) {
     	try {
     		Assert.assertTrue(PropertyUtils.getProperty(dbjSon, jsonPath).toString().equals(value),
 					"Verification failed for provided Json Element, expected value is : " + value);
@@ -82,9 +82,7 @@ public class MongoDBClient {
 		}
 	}
     
-	public void verify_json_element_value_for_contains(String jsonPath, String value) {
-		System.out.println("JSon Path : " + jsonPath);
-		System.out.println("JSon Value : " + value);
+	public void verify_json_element_value_by_contains(String jsonPath, String value) {
 		try {
 			Assert.assertTrue(PropertyUtils.getProperty(dbjSon, jsonPath).toString().contains(value),
 					"Verification failed for provided Json Element, expected value is : " + value);
