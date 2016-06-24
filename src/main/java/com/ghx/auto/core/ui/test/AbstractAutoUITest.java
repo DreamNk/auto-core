@@ -145,6 +145,10 @@ public abstract class AbstractAutoUITest {
     	return Environment.valueOf(envConfig.getTargetEnv().toUpperCase()).getEnvId();
     }
     
+    protected Environment getEnvironment() {
+    	return Environment.valueOf(envConfig.getTargetEnv().toUpperCase());
+    }
+    
     
     /**
      * Open an existing secondary driver or create one if not available.
