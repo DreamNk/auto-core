@@ -38,7 +38,9 @@ public class S3Client {
 		S3Object object = conn.getObject(new GetObjectRequest(bucket, fileName));
 		InputStream objectData = object.getObjectContent();
 		try {
-			return IOUtils.toString(objectData, "ISO-8859-1");
+			//return IOUtils.toString(objectData, "ISO-8859-1");
+			return IOUtils.toString(objectData);
+
 		} catch (IOException ie) {
 			Assert.fail("Failure reading the file from the bucket: " + bucket + ", file name:  " + fileName
 					+ ", error message: " + ie.getMessage());
