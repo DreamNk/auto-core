@@ -35,12 +35,14 @@ public class S3Client {
 	}
 
 	public String read_file_from_s3(String bucket, String fileName) {
+		return read_file_from_s3(bucket, fileName, "UTF-8");
+	}
+	
+	public String read_file_from_s3(String bucket, String fileName, String encoding) {
 		S3Object object = conn.getObject(new GetObjectRequest(bucket, fileName));
 		InputStream objectData = object.getObjectContent();
 		try {
-			//return IOUtils.toString(objectData, "ISO-8859-1");
-			return IOUtils.toString(objectData);
-
+			return IOUtils.toString(objectData, encoding);
 		} catch (IOException ie) {
 			Assert.fail("Failure reading the file from the bucket: " + bucket + ", file name:  " + fileName
 					+ ", error message: " + ie.getMessage());
