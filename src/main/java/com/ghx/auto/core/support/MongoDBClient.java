@@ -11,6 +11,9 @@ import java.util.Set;
 
 import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.collections4.CollectionUtils;
+import org.mongodb.morphia.Datastore;
+import org.mongodb.morphia.Morphia;
+import org.mongodb.morphia.query.Query;
 import org.springframework.dao.DataAccessException;
 import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -22,6 +25,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ghx.auto.core.ui.support.EnvConfig;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBCursor;
+import com.mongodb.MongoClient;
 import com.mongodb.MongoClientURI;
 import com.mongodb.MongoException;
 
@@ -31,12 +35,21 @@ public class MongoDBClient {
 	private String section; 
 	private MongoOperations mongoOperations;
 	private Object dbjSon;
+	private Datastore dataStore;
+	private String dbName;
 	
     public MongoDBClient(EnvConfig envConfig, String section) {
     	this.envConfig = envConfig;
     	this.section = section;
     	createMongoTemplate();
     }
+    
+	public MongoDBClient(EnvConfig envConfig, String section, String dbName) {
+		this.envConfig = envConfig;
+		this.section = section;
+		this.dbName = dbName;
+		createDataStore();
+	}
     
     public Set<String> get_collection_names() {
     	try {
@@ -157,5 +170,15 @@ public class MongoDBClient {
 			Assert.fail("Unknown mongo host, error message: " + uhe.getMessage());
 		}
     }
+    
+	@SuppressWarnings("unchecked")
+	public Query<Object> execute_query(Class c) {
+		return dataStore.createQuery(c);
+	}
+	
+	private void createDataStore() {
+		dataStore = new Morphia().createDatastore(
+				new MongoClient(new MongoClientURI(envConfig.getConfigParamValue(this.section, "uri"))), dbName);
+	}
 
 }

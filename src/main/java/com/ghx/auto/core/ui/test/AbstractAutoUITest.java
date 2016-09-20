@@ -275,6 +275,15 @@ public abstract class AbstractAutoUITest {
     }
     
     /**
+     * Get MongoDB Client Utility.
+     *
+     * @param section Environment Configuration Section to be referred.
+     */
+    protected MongoDBClient getMongoDBClient(String section, String dbName) {
+    	return new MongoDBClient(envConfig, section, dbName);
+    }
+    
+    /**
      * Get Excel Client Utility.
      *
      * @param section Environment Configuration Section to be referred.

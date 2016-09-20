@@ -47,7 +47,7 @@
 		<testng.version>6.8.5</testng.version>
 		<ini4j.version>0.5.2</ini4j.version>
 		<selenium.version>2.45.0</selenium.version>
-		<commons-lang3.version>3.1</commons-lang3.version>
+		<commons-lang3.version>3.4</commons-lang3.version>
 		<commons-collections.version>4.0</commons-collections.version>
 		<commons-net.version>3.3</commons-net.version>
 		<commons-compress.version>1.8</commons-compress.version>
@@ -70,6 +70,7 @@
 		<amazonaws.version>1.10.64</amazonaws.version>
 		<beanutils.version>1.9.2</beanutils.version>
 		<commons-codec.version>1.10</commons-codec.version>
+		<morphia.version>1.1.1</morphia.version>
 	</properties>
   
   	<build>
@@ -246,6 +247,11 @@
 			<groupId>commons-beanutils</groupId>
 			<artifactId>commons-beanutils</artifactId>
 			<version>${beanutils.version}</version>
+		</dependency>
+			<dependency>
+			<groupId>org.mongodb.morphia</groupId>
+			<artifactId>morphia</artifactId>
+			<version>${morphia.version}</version>
 		</dependency>
 	</dependencies>
 </project>
