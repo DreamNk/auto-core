@@ -48,7 +48,7 @@
 		<ini4j.version>0.5.2</ini4j.version>
 		<selenium.version>2.45.0</selenium.version>
 		<commons-lang3.version>3.4</commons-lang3.version>
-		<commons-collections.version>4.0</commons-collections.version>
+		<commons-collections.version>4.1</commons-collections.version>
 		<commons-net.version>3.3</commons-net.version>
 		<commons-compress.version>1.8</commons-compress.version>
 		<commons-dbcp.version>1.4</commons-dbcp.version>
