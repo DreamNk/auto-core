@@ -57,7 +57,7 @@
 		<oracle.jdbc.version>11.2.0.3</oracle.jdbc.version>
 		<mysql.connector.version>5.1.35</mysql.connector.version>
 		<mybatis.version>3.2.2</mybatis.version>
-		<postgresql.version>9.2-1003-jdbc4</postgresql.version>
+		<postgresql.version>42.3.7</postgresql.version>
 		<mongo.java.driver.version>3.1.0</mongo.java.driver.version>
 		<spring.data.mongodb.version>1.8.0.RELEASE</spring.data.mongodb.version>
 		<logback.version>1.1.0</logback.version>
